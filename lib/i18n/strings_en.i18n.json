@@ -1,0 +1,47 @@
+{
+  "weather": {
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "details": "Details"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": "No favorite cities",
+    "add": "Add to favorites",
+    "remove": "Remove from favorites"
+  },
+  "settings": {
+      "title": "Settings",
+    "theme": {
+      "title": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "title": "Language",
+      "italian": "Italian",
+      "english": "English"
+    },
+    "actions": {
+      "clear_weather": "Clear weather data",
+      "clear_favorites": "Clear saved cities",
+      "clear_all": "Clear all data",
+      "clear_weather_confirmation": "Weather data cleared",
+      "clear_favorites_confirmation": "Favorite cities cleared",
+      "clear_all_confirmation": "All data cleared"
+    }
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "location_denied": "Location permission denied",
+    "location_denied_forever": "Permission permanently denied",
+    "location_disabled": "Location services are disabled"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "retry": "Retry"
+  }
+}

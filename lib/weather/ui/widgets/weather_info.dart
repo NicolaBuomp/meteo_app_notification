@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meteo_app_notification/i18n/translations.dart';
 import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/toggle_favorite_button.dart';
 
@@ -40,7 +41,7 @@ class WeatherInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Umidità',
+                        context.translation.weather.humidity,
                         style: TextStyle(
                           color: Color(0xFFB5B5B5),
                         ),
@@ -56,7 +57,7 @@ class WeatherInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Vento',
+                        context.translation.weather.wind,
                         style: TextStyle(
                           color: Color(0xFFB5B5B5),
                         ),
@@ -75,7 +76,7 @@ class WeatherInfo extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          'Dettagli',
+                          context.translation.weather.details,
                           style: TextStyle(
                             fontSize: 18,
                             color: Color(0xFFB5B5B5),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/base/widgets/top_bar.dart';
+import 'package:meteo_app_notification/i18n/translations.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/favorite_city_card.dart';
 import 'package:meteo_app_notification/weather/viewmodel/favorite_cities_viewmodel.dart';
 
@@ -15,7 +16,7 @@ class FavoriteCityList extends ConsumerWidget {
       data: (cities) {
         return Column(
           children: [
-            TopBar(title: 'Preferiti'),
+            TopBar(title: context.translation.favorites.title),
             const SizedBox(
               height: 20,
             ),

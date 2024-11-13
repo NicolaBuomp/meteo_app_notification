@@ -51,5 +51,12 @@
 	<string>L'app necessita dell'accesso alla posizione per fornire informazioni meteo accurate.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>L'app utilizza la posizione per ottenere informazioni meteo basate sulla tua posizione attuale.</string>
+
+	<!-- Keys per la traduzione -->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>it</string>
+		<string>en</string>
+	</array>
 </dict>
 </plist>

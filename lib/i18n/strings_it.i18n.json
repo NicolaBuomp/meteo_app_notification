@@ -1,0 +1,47 @@
+{
+  "weather": {
+    "temperature": "Temperatura",
+    "humidity": "Umidità",
+    "wind": "Vento",
+    "details": "Dettagli"
+  },
+  "favorites": {
+    "title": "Preferiti",
+    "empty": "Nessuna città preferita",
+    "add": "Aggiungi ai preferiti",
+    "remove": "Rimuovi dai preferiti"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "theme": {
+      "title": "Tema",
+      "light": "Chiaro",
+      "dark": "Scuro",
+      "system": "Automatico"
+    },
+    "language": {
+      "title": "Lingua",
+      "italian": "Italiano",
+      "english": "Inglese"
+    },
+    "actions": {
+      "clear_weather": "Elimina dati meteo",
+      "clear_favorites": "Elimina città salvate",
+      "clear_all": "Elimina tutti i dati",
+      "clear_weather_confirmation": "Dati meteo eliminati",
+      "clear_favorites_confirmation": "Città preferite eliminate",
+      "clear_all_confirmation": "Tutti i dati eliminati"
+    }
+  },
+  "errors": {
+    "generic": "Si è verificato un errore",
+    "location_denied": "Permesso di localizzazione negato",
+    "location_denied_forever": "Permesso negato permanentemente",
+    "location_disabled": "Servizi di localizzazione disabilitati"
+  },
+  "buttons": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "retry": "Riprova"
+  }
+}
