@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meteo_app_notification/base/layout/layout_scaffold.dart';
 import 'package:meteo_app_notification/settings/ui/screens/settings/settings_page.dart';
-import 'package:meteo_app_notification/weather/ui/screens/weather_details/weather_details_page.dart';
+import 'package:meteo_app_notification/weather/ui/screens/weather_details_page.dart';
 import 'package:meteo_app_notification/weather/ui/screens/weather_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');

@@ -45,7 +45,7 @@ class WeatherPage extends ConsumerWidget {
                   onTrailingIconTap: () {
                     final city = searchController.text.trim();
                     if (city.isNotEmpty) {
-                      weatherViewModel.loadWeather(city);
+                      weatherViewModel.loadWeatherByCity(city);
                       searchController.clear();
                     }
                   },

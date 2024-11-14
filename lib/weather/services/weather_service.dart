@@ -13,6 +13,8 @@ class WeatherService {
       'region': weather.region,
       'country': weather.country,
       'localtime': weather.localtime,
+      'latitude': weather.latitude,
+      'longitude': weather.longitude,
       'temperature': weather.temperature,
       'condition': weather.condition,
       'iconUrl': weather.iconUrl,
@@ -35,6 +37,14 @@ class WeatherService {
                 'chanceOfRain': day.chanceOfRain,
                 'condition': day.condition,
                 'iconUrl': day.iconUrl,
+                'hourly': day.hourly
+                    .map((hour) => {
+                          'time': hour.time,
+                          'tempC': hour.tempC,
+                          'condition': hour.condition,
+                          'iconUrl': hour.iconUrl,
+                        })
+                    .toList(),
               })
           .toList(),
     });
@@ -53,6 +63,8 @@ class WeatherService {
         region: json['region'],
         country: json['country'],
         localtime: json['localtime'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
         temperature: json['temperature'],
         condition: json['condition'],
         iconUrl: json['iconUrl'],
@@ -75,6 +87,14 @@ class WeatherService {
             chanceOfRain: day['chanceOfRain'],
             condition: day['condition'],
             iconUrl: day['iconUrl'],
+            hourly: (day['hourly'] as List).map((hour) {
+              return HourlyForecast(
+                time: hour['time'],
+                tempC: hour['tempC'],
+                condition: hour['condition'],
+                iconUrl: hour['iconUrl'],
+              );
+            }).toList(),
           );
         }).toList(),
       );

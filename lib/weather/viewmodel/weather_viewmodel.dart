@@ -28,10 +28,10 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     }
   }
 
-  Future<void> loadWeather(String city) async {
+  Future<void> loadWeatherByCity(String city, {int days = 1}) async {
     try {
       state = const AsyncValue.loading();
-      final weather = await _repository.getWeatherByCity(city);
+      final weather = await _repository.getWeatherByCity(city, days);
       await _weatherService.saveWeatherData(weather); // Salva nella cache
       state = AsyncValue.data(weather);
     } catch (e) {
@@ -39,10 +39,11 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     }
   }
 
-  Future<void> loadWeatherByLocation(double latitude, double longitude) async {
+  Future<void> loadWeatherByLocation(double latitude, double longitude,
+      {int days = 1}) async {
     try {
       final weather =
-          await _repository.getWeatherByCoordinates(latitude, longitude);
+          await _repository.getWeatherByCoordinates(latitude, longitude, days);
       await _weatherService.saveWeatherData(weather); // Salva nella cache
       state = AsyncValue.data(weather);
     } catch (e) {
@@ -59,12 +60,11 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     }
   }
 
-  Future<void> refreshWeather() async {
-    try {
-      final position = await _determinePosition();
-      await loadWeatherByLocation(position.latitude, position.longitude);
-    } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+  Future<void> refreshWeather({int days = 1}) async {
+    if (state.value != null) {
+      final lat = state.value!.latitude;
+      final long = state.value!.longitude;
+      await loadWeatherByLocation(lat, long, days: days);
     }
   }
 

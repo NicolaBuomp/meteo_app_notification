@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meteo_app_notification/i18n/translations.dart';
 import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/toglle_city_actions.dart';
@@ -87,13 +88,15 @@ class WeatherInfo extends StatelessWidget {
                   const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () {
-                      print('Click');
+                      context.push(
+                        '/weatherDetails/${weather.latitude}/${weather.longitude}',
+                      );
                     },
                     child: Row(
                       children: [
                         Text(
                           context.translation.weather.details,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             color: Color(0xFFB5B5B5),
                           ),
@@ -101,10 +104,10 @@ class WeatherInfo extends StatelessWidget {
                         const SizedBox(
                           width: 5,
                         ),
-                        Icon(
+                        const Icon(
                           Icons.open_in_new_rounded,
                           color: Color(0xFFB5B5B5),
-                        )
+                        ),
                       ],
                     ),
                   )

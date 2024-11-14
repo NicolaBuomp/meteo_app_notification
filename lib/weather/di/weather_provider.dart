@@ -5,5 +5,5 @@ import '../data/repository/weather_repository.dart';
 final weatherRepositoryProvider =
     FutureProvider.family<WeatherModel, String>((ref, cityName) async {
   final repository = WeatherRepository();
-  return await repository.getWeatherByCity(cityName);
+  return await repository.getWeatherByCity(cityName, 1);
 });

@@ -6,7 +6,7 @@ class WeatherRepository {
   final String _apiKey = '5a6c17f7e5f94ff09bf180911242910';
   final String _baseUrl = 'http://api.weatherapi.com/v1/forecast.json';
 
-  Future<WeatherModel> getWeatherByCity(String city, {int days = 1}) async {
+  Future<WeatherModel> getWeatherByCity(String city, int days) async {
     try {
       final response = await _dio.get(
         _baseUrl,
@@ -31,8 +31,7 @@ class WeatherRepository {
   }
 
   Future<WeatherModel> getWeatherByCoordinates(
-      double latitude, double longitude,
-      {int days = 1}) async {
+      double latitude, double longitude, int days) async {
     try {
       final response = await _dio.get(
         _baseUrl,

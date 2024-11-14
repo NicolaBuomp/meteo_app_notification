@@ -14,7 +14,6 @@ class WeatherContent extends ConsumerWidget {
     return weatherState.when(
       data: (weather) => weather != null
           ? ListView(
-              // Gestisce tutto lo scroll
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 WeatherInfo(weather: weather),

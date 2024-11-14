@@ -4,6 +4,7 @@ import 'package:meteo_app_notification/base/widgets/top_bar.dart';
 import 'package:meteo_app_notification/i18n/translations.dart';
 import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/favorite_city_card.dart';
+import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
 
 class FavoriteCityList extends ConsumerWidget {
   const FavoriteCityList({super.key});
@@ -34,7 +35,11 @@ class FavoriteCityList extends ConsumerWidget {
                 final city = cities[index];
                 return FavoriteCityCard(
                   city: city,
-                  onTap: () {},
+                  onTap: () {
+                    final weatherViewModel =
+                        ref.read(weatherViewModelProvider.notifier);
+                    weatherViewModel.loadWeatherByCity(city.name);
+                  },
                 );
               },
             ),
