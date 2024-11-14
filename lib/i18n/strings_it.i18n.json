@@ -4,6 +4,12 @@
     "humidity": "Umidità",
     "wind": "Vento",
     "details": "Dettagli"
+  },  
+  "navigationBar": {
+    "label": {
+      "weather": "Meteo",
+      "settings": "Impostazioni"
+    }
   },
   "favorites": {
     "title": "Preferiti",

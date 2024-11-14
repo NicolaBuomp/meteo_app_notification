@@ -31,11 +31,9 @@ class ThemeViewModel extends StateNotifier<ThemeMode> {
 
   void toggleTheme() {
     if (state == ThemeMode.light) {
-      state = ThemeMode.dark;
-      _themeService.saveTheme(ThemeMode.dark);
+      setDarkMode();
     } else {
-      state = ThemeMode.light;
-      _themeService.saveTheme(ThemeMode.light);
+      setLightMode();
     }
   }
 }

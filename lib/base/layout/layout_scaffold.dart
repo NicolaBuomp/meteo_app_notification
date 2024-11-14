@@ -40,7 +40,7 @@ class LayoutScaffold extends StatelessWidget {
                           horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Theme.of(context).primaryColor
+                            ? Theme.of(context).colorScheme.onSurface
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -55,7 +55,12 @@ class LayoutScaffold extends StatelessWidget {
                               child: Icon(
                                 destination.icon,
                                 key: ValueKey<bool>(isSelected),
-                                color: isSelected ? Colors.white : Colors.grey,
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.surface
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.5),
                                 size: isSelected
                                     ? 28
                                     : 24, // Differenza dimensione
@@ -68,9 +73,11 @@ class LayoutScaffold extends StatelessWidget {
                                   ? Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: Text(
-                                        destination.label,
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        destination.translationKey,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

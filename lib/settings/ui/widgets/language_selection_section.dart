@@ -20,7 +20,10 @@ class LanguageSelectionSection extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         RadioListTile<AppLocale>(
-          title: Text(translation.settings.language.italian),
+          title: Text(
+            translation.settings.language.italian,
+            style: TextStyle(color: Colors.white),
+          ),
           value: AppLocale.it,
           groupValue: currentLocale,
           onChanged: (locale) {
@@ -30,7 +33,10 @@ class LanguageSelectionSection extends ConsumerWidget {
           },
         ),
         RadioListTile<AppLocale>(
-          title: Text(translation.settings.language.english),
+          title: Text(
+            translation.settings.language.english,
+            style: TextStyle(color: Colors.white),
+          ),
           value: AppLocale.en,
           groupValue: currentLocale,
           onChanged: (locale) {

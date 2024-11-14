@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/Base/widgets/custom_snack_bar.dart';
-import 'package:meteo_app_notification/weather/viewmodel/favorite_cities_viewmodel.dart';
+import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
 
 class ToggleFavoriteButton extends ConsumerWidget {
   final String city;
+  final double iconSize;
 
-  const ToggleFavoriteButton({
-    super.key,
-    required this.city,
-  });
+  const ToggleFavoriteButton(
+      {super.key, required this.city, required this.iconSize});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favoriteCitiesState = ref.watch(favoriteCitiesViewModelProvider);
-    final favoriteCitiesNotifier =
-        ref.read(favoriteCitiesViewModelProvider.notifier);
+    final cityInfoState = ref.watch(cityInfoViewModelProvider);
+    final cityInfoNotifier = ref.read(cityInfoViewModelProvider.notifier);
 
-    final isFavorite = favoriteCitiesState.when(
-      data: (cities) => cities.any((favoriteCity) => favoriteCity.name == city),
+    final isFavorite = cityInfoState.when(
+      data: (cities) => cities.any((cityInfo) => cityInfo.name == city),
       loading: () => false,
       error: (error, _) => false,
     );
@@ -26,12 +24,12 @@ class ToggleFavoriteButton extends ConsumerWidget {
     return IconButton(
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
-        color: isFavorite ? Colors.red : Colors.grey,
-        size: 38,
+        color: Colors.red,
+        size: iconSize,
       ),
-      onPressed: () {
+      onPressed: () async {
         if (isFavorite) {
-          favoriteCitiesNotifier.removeCity(city);
+          await cityInfoNotifier.removeCity(city);
           CustomSnackBar.show(
             context,
             message: '$city rimossa dai preferiti',
@@ -39,7 +37,7 @@ class ToggleFavoriteButton extends ConsumerWidget {
             icon: Icons.favorite_border,
           );
         } else {
-          favoriteCitiesNotifier.addCity(city);
+          await cityInfoNotifier.addCity(city);
           CustomSnackBar.show(
             context,
             message: '$city aggiunta ai preferiti',

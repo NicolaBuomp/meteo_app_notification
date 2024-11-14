@@ -4,18 +4,19 @@ import '../models/weather_model.dart';
 class WeatherRepository {
   final Dio _dio = Dio();
   final String _apiKey = '5a6c17f7e5f94ff09bf180911242910';
-  final String _baseUrl = 'http://api.weatherapi.com/v1/current.json';
+  final String _baseUrl = 'http://api.weatherapi.com/v1/forecast.json';
 
-  /// Fetch weather data by city name
-  Future<WeatherModel> getWeatherByCity(String city) async {
+  Future<WeatherModel> getWeatherByCity(String city, {int days = 1}) async {
     try {
       final response = await _dio.get(
         _baseUrl,
         queryParameters: {
           'key': _apiKey,
           'q': city,
+          'days': days,
           'lang': 'it',
           'aqi': 'no',
+          'alerts': 'yes',
         },
       );
 
@@ -29,17 +30,18 @@ class WeatherRepository {
     }
   }
 
-  /// Fetch weather data by latitude and longitude
   Future<WeatherModel> getWeatherByCoordinates(
-      double latitude, double longitude) async {
+      double latitude, double longitude,
+      {int days = 1}) async {
     try {
       final response = await _dio.get(
         _baseUrl,
         queryParameters: {
           'key': _apiKey,
           'q': '$latitude,$longitude',
+          'days': days,
           'lang': 'it',
-          'aqi': 'no',
+          'alerts': 'yes',
         },
       );
 

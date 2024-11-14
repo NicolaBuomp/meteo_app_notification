@@ -13,7 +13,9 @@ class WeatherContent extends ConsumerWidget {
 
     return weatherState.when(
       data: (weather) => weather != null
-          ? Column(
+          ? ListView(
+              // Gestisce tutto lo scroll
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 WeatherInfo(weather: weather),
                 const SizedBox(height: 24),
@@ -26,7 +28,9 @@ class WeatherContent extends ConsumerWidget {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
       error: (err, stack) => Center(
         child: Text(
           'Errore: $err',

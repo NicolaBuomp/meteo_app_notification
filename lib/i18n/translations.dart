@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 58 (29 per locale)
+/// Strings: 62 (31 per locale)
 ///
-/// Built on 2024-11-13 at 12:15 UTC
+/// Built on 2024-11-13 at 13:46 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -149,6 +149,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 
 	// Translations
 	late final _TranslationsWeatherIt weather = _TranslationsWeatherIt._(_root);
+	late final _TranslationsNavigationBarIt navigationBar = _TranslationsNavigationBarIt._(_root);
 	late final _TranslationsFavoritesIt favorites = _TranslationsFavoritesIt._(_root);
 	late final _TranslationsSettingsIt settings = _TranslationsSettingsIt._(_root);
 	late final _TranslationsErrorsIt errors = _TranslationsErrorsIt._(_root);
@@ -166,6 +167,16 @@ class _TranslationsWeatherIt {
 	String get humidity => 'Umidità';
 	String get wind => 'Vento';
 	String get details => 'Dettagli';
+}
+
+// Path: navigationBar
+class _TranslationsNavigationBarIt {
+	_TranslationsNavigationBarIt._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final _TranslationsNavigationBarLabelIt label = _TranslationsNavigationBarLabelIt._(_root);
 }
 
 // Path: favorites
@@ -217,6 +228,17 @@ class _TranslationsButtonsIt {
 	String get save => 'Salva';
 	String get cancel => 'Annulla';
 	String get retry => 'Riprova';
+}
+
+// Path: navigationBar.label
+class _TranslationsNavigationBarLabelIt {
+	_TranslationsNavigationBarLabelIt._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get weather => 'Meteo';
+	String get settings => 'Impostazioni';
 }
 
 // Path: settings.theme
@@ -286,6 +308,7 @@ class _TranslationsEn extends Translations {
 
 	// Translations
 	@override late final _TranslationsWeatherEn weather = _TranslationsWeatherEn._(_root);
+	@override late final _TranslationsNavigationBarEn navigationBar = _TranslationsNavigationBarEn._(_root);
 	@override late final _TranslationsFavoritesEn favorites = _TranslationsFavoritesEn._(_root);
 	@override late final _TranslationsSettingsEn settings = _TranslationsSettingsEn._(_root);
 	@override late final _TranslationsErrorsEn errors = _TranslationsErrorsEn._(_root);
@@ -303,6 +326,16 @@ class _TranslationsWeatherEn extends _TranslationsWeatherIt {
 	@override String get humidity => 'Humidity';
 	@override String get wind => 'Wind';
 	@override String get details => 'Details';
+}
+
+// Path: navigationBar
+class _TranslationsNavigationBarEn extends _TranslationsNavigationBarIt {
+	_TranslationsNavigationBarEn._(_TranslationsEn root) : this._root = root, super._(root);
+
+	@override final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsNavigationBarLabelEn label = _TranslationsNavigationBarLabelEn._(_root);
 }
 
 // Path: favorites
@@ -356,6 +389,17 @@ class _TranslationsButtonsEn extends _TranslationsButtonsIt {
 	@override String get retry => 'Retry';
 }
 
+// Path: navigationBar.label
+class _TranslationsNavigationBarLabelEn extends _TranslationsNavigationBarLabelIt {
+	_TranslationsNavigationBarLabelEn._(_TranslationsEn root) : this._root = root, super._(root);
+
+	@override final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get weather => 'Meteo';
+	@override String get settings => 'Impostazioni';
+}
+
 // Path: settings.theme
 class _TranslationsSettingsThemeEn extends _TranslationsSettingsThemeIt {
 	_TranslationsSettingsThemeEn._(_TranslationsEn root) : this._root = root, super._(root);
@@ -406,6 +450,8 @@ extension on Translations {
 			case 'weather.humidity': return 'Umidità';
 			case 'weather.wind': return 'Vento';
 			case 'weather.details': return 'Dettagli';
+			case 'navigationBar.label.weather': return 'Meteo';
+			case 'navigationBar.label.settings': return 'Impostazioni';
 			case 'favorites.title': return 'Preferiti';
 			case 'favorites.empty': return 'Nessuna città preferita';
 			case 'favorites.add': return 'Aggiungi ai preferiti';
@@ -443,6 +489,8 @@ extension on _TranslationsEn {
 			case 'weather.humidity': return 'Humidity';
 			case 'weather.wind': return 'Wind';
 			case 'weather.details': return 'Details';
+			case 'navigationBar.label.weather': return 'Meteo';
+			case 'navigationBar.label.settings': return 'Impostazioni';
 			case 'favorites.title': return 'Favorites';
 			case 'favorites.empty': return 'No favorite cities';
 			case 'favorites.add': return 'Add to favorites';

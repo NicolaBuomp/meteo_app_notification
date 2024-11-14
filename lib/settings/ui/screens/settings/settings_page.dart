@@ -18,11 +18,27 @@ class SettingsPage extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             ClearDataSection(),
-            Divider(),
+            SizedBox(
+              height: 8,
+            ),
+            Divider(
+              color: Colors.grey.shade700,
+            ),
+            SizedBox(
+              height: 8,
+            ),
             ThemeSelectionSection(),
-            Divider(),
+            SizedBox(
+              height: 8,
+            ),
+            Divider(
+              color: Colors.grey.shade700,
+            ),
+            SizedBox(
+              height: 8,
+            ),
             LanguageSelectionSection(),
           ],
         ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Destination {
-  const Destination({required this.label, required this.icon});
+  const Destination({required this.translationKey, required this.icon});
 
-  final String label;
+  final String translationKey;
   final IconData icon;
 }
 
 const destinations = [
-  Destination(label: 'Weather', icon: Icons.home_outlined),
-  Destination(label: 'Impostazioni', icon: Icons.settings_outlined),
+  Destination(translationKey: 'weather', icon: Icons.home_rounded),
+  Destination(translationKey: 'impostazioni', icon: Icons.settings_rounded),
 ];

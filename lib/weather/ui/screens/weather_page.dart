@@ -13,7 +13,6 @@ class WeatherPage extends ConsumerWidget {
     final weatherViewModel = ref.read(weatherViewModelProvider.notifier);
     final searchController = TextEditingController();
 
-    // Determina il testo del placeholder dinamico
     String hintText = "Cerca";
     weatherState.whenData((weather) {
       if (weather != null) {
@@ -22,17 +21,16 @@ class WeatherPage extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 50.0),
+      body: SafeArea(
         child: RefreshIndicator(
           onRefresh: weatherViewModel.refreshWeather,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                CustomSearchInput(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CustomSearchInput(
                   controller: searchController,
-                  hintText: hintText, // Usa il nome della città o "Cerca"
+                  hintText: hintText,
                   leadingIcon: Icons.location_on_rounded,
                   trailingIcon: Icons.send_rounded,
                   onLeadingIconTap: () async {
@@ -52,11 +50,12 @@ class WeatherPage extends ConsumerWidget {
                     }
                   },
                 ),
-                const SizedBox(height: 16),
-                weatherState.when(
+              ),
+              Expanded(
+                child: weatherState.when(
                   data: (weather) => WeatherContent(),
                   loading: () => const Center(
-                    child: CircularProgressIndicator(),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
                   error: (err, _) => Center(
                     child: Text(
@@ -65,8 +64,8 @@ class WeatherPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -20,7 +20,10 @@ class ThemeSelectionSection extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         RadioListTile<ThemeMode>(
-          title: Text(context.translation.settings.theme.light),
+          title: Text(
+            context.translation.settings.theme.light,
+            style: TextStyle(color: Colors.white),
+          ),
           value: ThemeMode.light,
           groupValue: themeMode,
           onChanged: (value) {
@@ -30,7 +33,10 @@ class ThemeSelectionSection extends ConsumerWidget {
           },
         ),
         RadioListTile<ThemeMode>(
-          title: Text(context.translation.settings.theme.dark),
+          title: Text(
+            context.translation.settings.theme.dark,
+            style: TextStyle(color: Colors.white),
+          ),
           value: ThemeMode.dark,
           groupValue: themeMode,
           onChanged: (value) {
@@ -40,7 +46,10 @@ class ThemeSelectionSection extends ConsumerWidget {
           },
         ),
         RadioListTile<ThemeMode>(
-          title: Text(context.translation.settings.theme.system),
+          title: Text(
+            context.translation.settings.theme.system,
+            style: TextStyle(color: Colors.white),
+          ),
           value: ThemeMode.system,
           groupValue: themeMode,
           onChanged: (value) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meteo_app_notification/i18n/translations.dart';
 import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/toggle_favorite_button.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/toglle_city_actions.dart';
 
 class WeatherInfo extends StatelessWidget {
   final WeatherModel weather;
@@ -22,16 +22,32 @@ class WeatherInfo extends StatelessWidget {
                 style:
                     const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
               ),
-              ToggleFavoriteButton(city: weather.location)
+              ToggleCityActions(weather: weather),
             ],
           ),
           Row(
             children: [
               Image.network(
-                height: 200,
-                width: 200,
                 weather.iconUrl,
+                height: 180,
+                width: 180,
                 fit: BoxFit.cover,
+                filterQuality: FilterQuality.high,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.broken_image,
+                    size: 180,
+                    color: Colors.grey,
+                  );
+                },
               ),
               const SizedBox(width: 36),
               Column(
