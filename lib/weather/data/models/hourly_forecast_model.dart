@@ -24,7 +24,7 @@ class HourlyForecast {
         tempC: (json['temp_c'] as num?)?.toDouble() ?? 0.0,
         condition: WeatherCondition.fromJson(json['condition'] ?? {}),
         chanceOfRain: json['chance_of_rain'] as int? ?? 0,
-        isDayTime: json['is_day'] == 0);
+        isDayTime: json['is_day'] == 1);
   }
 
   Map<String, dynamic> toJson() {

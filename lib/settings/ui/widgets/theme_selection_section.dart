@@ -22,7 +22,6 @@ class ThemeSelectionSection extends ConsumerWidget {
         RadioListTile<ThemeMode>(
           title: Text(
             context.translation.settings.theme.light,
-            style: TextStyle(color: Colors.white),
           ),
           value: ThemeMode.light,
           groupValue: themeMode,
@@ -35,7 +34,6 @@ class ThemeSelectionSection extends ConsumerWidget {
         RadioListTile<ThemeMode>(
           title: Text(
             context.translation.settings.theme.dark,
-            style: TextStyle(color: Colors.white),
           ),
           value: ThemeMode.dark,
           groupValue: themeMode,
@@ -48,7 +46,6 @@ class ThemeSelectionSection extends ConsumerWidget {
         RadioListTile<ThemeMode>(
           title: Text(
             context.translation.settings.theme.system,
-            style: TextStyle(color: Colors.white),
           ),
           value: ThemeMode.system,
           groupValue: themeMode,

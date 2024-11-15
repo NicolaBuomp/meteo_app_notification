@@ -1,5 +1,3 @@
-// lib/weather/ui/widgets/weather_forecast.dart
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
@@ -26,9 +24,8 @@ class WeatherForecast extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Nei prossimi tre giorni',
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            'Nei prossimi giorni',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           ListView.builder(
@@ -48,24 +45,22 @@ class WeatherForecast extends StatelessWidget {
   Widget _buildForecastTile(DailyForecast day) {
     String formatDate(String dateString) {
       final date = DateTime.parse(dateString);
-      return DateFormat('EEEE').format(date); // Es. "Thursday"
+      return DateFormat('EEEE').format(date);
     }
 
     return Card(
       elevation: 0,
-      color: Colors.grey[800],
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
         leading: WeatherIconWidget(
           conditionCode: day.condition.code,
-          isDayTime: true, //Passiamo isDayTime
+          isDayTime: true,
           size: 35.0,
           color: Colors.blueGrey,
         ),
         title: Text(
           formatDate(day.date),
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
           day.condition.text,
@@ -77,11 +72,9 @@ class WeatherForecast extends StatelessWidget {
           children: [
             Text(
               'Max: ${day.maxTemp}°C',
-              style: const TextStyle(color: Colors.white),
             ),
             Text(
               'Min: ${day.minTemp}°C',
-              style: const TextStyle(color: Colors.white),
             ),
           ],
         ),

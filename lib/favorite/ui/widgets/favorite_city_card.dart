@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meteo_app_notification/base/theme/app_colors.dart';
 import 'package:meteo_app_notification/weather/data/models/city_info_model.dart';
 import 'package:meteo_app_notification/weather/di/weather_provider.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/toggle_city_actions.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
 
 class FavoriteCityCard extends ConsumerWidget {
   final CityInfo city;
@@ -17,84 +19,88 @@ class FavoriteCityCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherState = ref.watch(weatherRepositoryProvider(city.name));
-
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final Color backgroundColor =
+        isDarkMode ? AppColors.darkCard : AppColors.lightCard;
+    final List<BoxShadow> boxShadow = [
+      BoxShadow(
+        color: isDarkMode ? Colors.black26 : Colors.grey.withOpacity(0.2),
+        blurRadius: 8,
+        offset: const Offset(0, 1),
+      ),
+    ];
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: const Color(0xFF6631BD),
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: boxShadow,
         ),
         child: weatherState.when(
           data: (weather) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // Header della card
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
+                  // Informazioni sulla città
+                  Expanded(
                     child: Row(
                       children: [
-                        const Icon(Icons.cloud, size: 32, color: Colors.white),
+                        WeatherIconWidget(
+                          conditionCode: weather.current.condition.code,
+                          isDayTime: weather.current.isDayTime,
+                          size: 40.0,
+                          color: Colors.blueGrey,
+                        ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Location',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              Text(
-                                city.name,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
+                          child: Text(
+                            city.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
                     ),
                   ),
+                  // Azioni sulla città
                   ToggleCityActions(
                     weather: weather,
                     iconSize: 30,
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
+              // Dettagli meteo
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _WeatherDetail(
-                      label: 'Wind',
-                      value: '${weather.current.windSpeed} km/h'),
+                    label: 'Temperatura',
+                    value: '${weather.current.temperature}°C',
+                  ),
                   _WeatherDetail(
-                      label: 'Temp', value: '${weather.current.temperature}°C'),
+                    label: 'Vento',
+                    value: '${weather.current.windSpeed} km/h',
+                  ),
                   _WeatherDetail(
-                      label: 'Humidity', value: '${weather.current.humidity}%'),
+                    label: 'Umidità',
+                    value: '${weather.current.humidity}%',
+                  ),
                 ],
               ),
             ],
           ),
           loading: () => const Center(
             child: CircularProgressIndicator(
-              color: Colors.white,
               strokeWidth: 2.0,
             ),
           ),
@@ -105,7 +111,7 @@ class FavoriteCityCard extends ConsumerWidget {
                 const Icon(Icons.error, color: Colors.red, size: 24),
                 const SizedBox(height: 8),
                 const Text(
-                  'Error loading weather',
+                  'Errore nel caricamento',
                   style: TextStyle(color: Colors.red, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -113,7 +119,7 @@ class FavoriteCityCard extends ConsumerWidget {
                   onPressed: () =>
                       ref.refresh(weatherRepositoryProvider(city.name)),
                   child: const Text(
-                    'Retry',
+                    'Riprova',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -137,9 +143,14 @@ class _WeatherDetail extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(color: Colors.white70, fontSize: 12)),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 16)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12),
+        ),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 16),
+        ),
       ],
     );
   }

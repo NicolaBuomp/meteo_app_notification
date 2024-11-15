@@ -15,7 +15,7 @@ class SettingsPage extends ConsumerWidget {
         title: Text(Translations.of(context).settings.title),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

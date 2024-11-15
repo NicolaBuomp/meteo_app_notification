@@ -8,7 +8,7 @@ class AppColors {
   static const Color black = Colors.black;
 
   // Colori tema chiaro
-  static const Color lightPrimary = Color(0xFF2196F3); // Blu cielo
+  static const Color lightPrimary = Color(0xFF0252F2); // Blu cielo
   static const Color lightAccent = Color(0xFFFFC107); // Arancione sole
   static const Color lightBackground = Color(0xFFF0F8FF); // Blu Alice
   static const Color lightCard = Color(0xFFFFFFFF); // Bianco

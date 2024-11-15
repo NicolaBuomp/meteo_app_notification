@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meteo_app_notification/base/widgets/top_bar.dart';
-import 'package:meteo_app_notification/i18n/translations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/favorite_city_card.dart';
+import 'package:meteo_app_notification/favorite/ui/widgets/favorite_city_card.dart';
 import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
 
 class FavoriteCityList extends ConsumerWidget {
@@ -24,7 +23,6 @@ class FavoriteCityList extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TopBar(title: context.translation.favorites.title),
             const SizedBox(height: 20),
             ListView.builder(
               shrinkWrap: true,
@@ -39,6 +37,7 @@ class FavoriteCityList extends ConsumerWidget {
                     final weatherViewModel =
                         ref.read(weatherViewModelProvider.notifier);
                     weatherViewModel.loadWeatherByCity(city.name);
+                    context.go('/weather');
                   },
                 );
               },

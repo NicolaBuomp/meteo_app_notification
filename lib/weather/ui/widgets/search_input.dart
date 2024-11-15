@@ -23,7 +23,7 @@ class CustomSearchInput extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20), // Arrotondamento dei bordi
+        borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(

@@ -28,7 +28,7 @@ class WeatherPage extends ConsumerWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 child: CustomSearchInput(
                   controller: searchController,
                   hintText: hintText,

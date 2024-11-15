@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meteo_app_notification/base/layout/layout_scaffold.dart';
+import 'package:meteo_app_notification/favorite/ui/screens/favorite_page.dart';
 import 'package:meteo_app_notification/settings/ui/screens/settings/settings_page.dart';
 import 'package:meteo_app_notification/weather/ui/screens/weather_details_page.dart';
 import 'package:meteo_app_notification/weather/ui/screens/weather_page.dart';
@@ -35,6 +36,14 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
+              path: Routes.favoritePage,
+              builder: (context, state) => const FavoritePage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
               path: Routes.settingsPage,
               builder: (context, state) => const SettingsPage(),
             ),
@@ -46,7 +55,8 @@ final router = GoRouter(
 );
 
 class Routes {
-  static const String weatherPage = '/weatherPage';
-  static const String weatherDetailsWithId = '/weatherDetails/:lat/:long';
+  static const String weatherPage = '/weather';
+  static const String weatherDetailsWithId = '/weather/details/:lat/:long';
+  static const String favoritePage = '/favorite';
   static const String settingsPage = '/settings';
 }

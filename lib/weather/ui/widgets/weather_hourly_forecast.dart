@@ -35,7 +35,6 @@ class WeatherHourlyForecast extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
             ),
           ),
           const SizedBox(height: 8),
@@ -61,7 +60,6 @@ class WeatherHourlyForecast extends StatelessWidget {
 
     return Card(
       elevation: 0,
-      color: Colors.grey[800],
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: SizedBox(
         width: 60,
@@ -72,22 +70,20 @@ class WeatherHourlyForecast extends StatelessWidget {
             children: [
               Text(
                 time,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
               ),
               const SizedBox(height: 4),
               WeatherIconWidget(
                 conditionCode: hour.condition.code,
-                isDayTime: hour.isDayTime, //Passiamo isDayTime
+                isDayTime: hour.isDayTime,
                 size: 20.0,
                 color: Colors.blueGrey,
               ),
               const SizedBox(height: 4),
               Text(
                 '${hour.tempC}°C',
-                style: const TextStyle(color: Colors.white, fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             ],
           ),

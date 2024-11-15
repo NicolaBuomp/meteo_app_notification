@@ -11,10 +11,10 @@ class AppTheme {
       secondary: AppColors.lightAccent,
       onSecondary: AppColors.white,
       surface: AppColors.lightCard,
-      onSurface: AppColors.lightText,
+      onSurface: AppColors.darkCard,
     ),
     appBarTheme: AppBarTheme(
-      color: AppColors.lightPrimary,
+      color: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: AppColors.white),
       titleTextStyle: AppTextStyles.headlineSmallLight,
@@ -52,9 +52,8 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor:
-            MaterialStateProperty.all<Color>(AppColors.lightPrimary),
-        textStyle: MaterialStateProperty.all<TextStyle>(
+        foregroundColor: WidgetStateProperty.all<Color>(AppColors.lightPrimary),
+        textStyle: WidgetStateProperty.all<TextStyle>(
           AppTextStyles.bodyLargeLight,
         ),
       ),

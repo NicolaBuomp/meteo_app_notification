@@ -9,5 +9,6 @@ class Destination {
 
 const destinations = [
   Destination(translationKey: 'weather', icon: Icons.home_rounded),
+  Destination(translationKey: 'preferiti', icon: Icons.favorite),
   Destination(translationKey: 'impostazioni', icon: Icons.settings_rounded),
 ];

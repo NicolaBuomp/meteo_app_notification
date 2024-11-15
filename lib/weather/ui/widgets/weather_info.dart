@@ -14,7 +14,7 @@ class WeatherInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Column(
         children: [
           Row(
@@ -29,6 +29,7 @@ class WeatherInfo extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               WeatherIconWidget(
                 conditionCode: weather.current.condition.code,
@@ -36,7 +37,6 @@ class WeatherInfo extends StatelessWidget {
                 size: 100.0,
                 color: Colors.blueGrey,
               ),
-              const SizedBox(width: 40),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

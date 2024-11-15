@@ -34,7 +34,7 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     }
   }
 
-  Future<void> loadWeatherByCity(String city, {int days = 1}) async {
+  Future<void> loadWeatherByCity(String city, {int days = 3}) async {
     try {
       state = const AsyncValue.loading();
       final weather = await _repository.getWeatherByCity(city, days);
@@ -46,7 +46,7 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
   }
 
   Future<void> loadWeatherByLocation(double latitude, double longitude,
-      {int days = 1}) async {
+      {int days = 3}) async {
     try {
       final weather =
           await _repository.getWeatherByCoordinates(latitude, longitude, days);
@@ -66,7 +66,7 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     }
   }
 
-  Future<void> refreshWeather({int days = 1}) async {
+  Future<void> refreshWeather({int days = 3}) async {
     if (state.value != null) {
       final lat = state.value!.location.latitude;
       final long = state.value!.location.longitude;
