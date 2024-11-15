@@ -1,5 +1,3 @@
-// lib/weather/ui/screens/weather_details_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/custom_app_bar_details.dart';

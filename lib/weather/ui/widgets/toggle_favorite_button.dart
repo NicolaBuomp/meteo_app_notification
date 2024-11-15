@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/Base/widgets/custom_snack_bar.dart';
-import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
+import 'package:meteo_app_notification/favorite/di/favorite_city_provider.dart';
 
 class ToggleFavoriteButton extends ConsumerWidget {
   final String city;

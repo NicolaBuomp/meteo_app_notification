@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
+import 'package:meteo_app_notification/favorite/di/favorite_city_provider.dart';
 import 'package:meteo_app_notification/favorite/ui/widgets/favorite_city_card.dart';
 import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
 

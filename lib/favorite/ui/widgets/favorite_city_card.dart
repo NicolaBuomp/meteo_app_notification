@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/base/theme/app_colors.dart';
-import 'package:meteo_app_notification/weather/data/models/city_info_model.dart';
+import 'package:meteo_app_notification/favorite/data/models/favorite_city_model.dart';
 import 'package:meteo_app_notification/weather/di/weather_provider.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/toggle_city_actions.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
 
 class FavoriteCityCard extends ConsumerWidget {
-  final CityInfo city;
+  final FavoriteCityModel city;
   final VoidCallback onTap;
 
   const FavoriteCityCard({
@@ -43,11 +43,9 @@ class FavoriteCityCard extends ConsumerWidget {
           data: (weather) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header della card
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Informazioni sulla città
                   Expanded(
                     child: Row(
                       children: [
@@ -71,7 +69,6 @@ class FavoriteCityCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  // Azioni sulla città
                   ToggleCityActions(
                     weather: weather,
                     iconSize: 30,
@@ -79,7 +76,6 @@ class FavoriteCityCard extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              // Dettagli meteo
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

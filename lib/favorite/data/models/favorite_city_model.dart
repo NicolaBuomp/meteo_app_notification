@@ -1,11 +1,11 @@
-class CityInfo {
+class FavoriteCityModel {
   final String name;
   bool notificationEnabled;
   double? latitude;
   double? longitude;
   String? weatherCondition;
 
-  CityInfo({
+  FavoriteCityModel({
     required this.name,
     this.notificationEnabled = false,
     this.latitude,
@@ -13,8 +13,8 @@ class CityInfo {
     this.weatherCondition,
   });
 
-  factory CityInfo.fromJson(Map<String, dynamic> json) {
-    return CityInfo(
+  factory FavoriteCityModel.fromJson(Map<String, dynamic> json) {
+    return FavoriteCityModel(
       name: json['name'] as String,
       notificationEnabled: json['notificationEnabled'] as bool? ?? false,
       latitude: json['latitude'] as double?,

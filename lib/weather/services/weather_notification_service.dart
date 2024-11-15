@@ -1,5 +1,3 @@
-// lib/weather/services/weather_notification_service.dart
-
 import 'package:meteo_app_notification/weather/data/models/models.dart';
 import '../../services/notifications/local_notifications_services.dart';
 import 'package:intl/intl.dart';

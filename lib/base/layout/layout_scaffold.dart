@@ -20,7 +20,7 @@ class LayoutScaffold extends StatelessWidget {
             bottom: 20.0,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(24), // Bordi arrotondati
+            borderRadius: BorderRadius.circular(24),
             child: Container(
               height: 80,
               color: Theme.of(context).colorScheme.surface,
@@ -33,9 +33,8 @@ class LayoutScaffold extends StatelessWidget {
                     onTap: () => navigationShell
                         .goBranch(destinations.indexOf(destination)),
                     child: AnimatedContainer(
-                      duration: const Duration(
-                          milliseconds: 300), // Animazione più lunga
-                      curve: Curves.easeInOut, // Curva più fluida
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
@@ -61,9 +60,7 @@ class LayoutScaffold extends StatelessWidget {
                                         .colorScheme
                                         .onSurface
                                         .withOpacity(0.5),
-                                size: isSelected
-                                    ? 28
-                                    : 24, // Differenza dimensione
+                                size: isSelected ? 28 : 24,
                               ),
                             ),
                             AnimatedSize(

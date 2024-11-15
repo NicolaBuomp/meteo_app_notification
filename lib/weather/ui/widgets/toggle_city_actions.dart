@@ -1,5 +1,3 @@
-// Assicurati che il nome del file sia corretto: lib/weather/ui/widgets/toggle_city_actions.dart
-
 import 'package:flutter/material.dart';
 import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/toggle_favorite_button.dart';

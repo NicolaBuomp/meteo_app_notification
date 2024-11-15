@@ -1,5 +1,3 @@
-// lib/weather/ui/widgets/weather_hourly_forecast.dart
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';

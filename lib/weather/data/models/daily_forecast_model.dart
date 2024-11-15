@@ -1,5 +1,3 @@
-// lib/weather/data/models/daily_forecast_model.dart
-
 import 'package:meteo_app_notification/weather/data/models/models.dart';
 
 class DailyForecast {

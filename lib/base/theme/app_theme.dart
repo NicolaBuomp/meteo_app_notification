@@ -72,10 +72,9 @@ class AppTheme {
       onSecondary: AppColors.white,
       surface: AppColors.darkCard,
       onSurface: AppColors.darkText,
-      // background: AppColors.darkBackground, // Rimosso perché deprecato
     ),
     appBarTheme: AppBarTheme(
-      color: AppColors.darkPrimary,
+      color: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: AppColors.white),
       titleTextStyle: AppTextStyles.headlineSmallDark,

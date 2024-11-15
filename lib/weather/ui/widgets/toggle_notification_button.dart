@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/base/widgets/custom_snack_bar.dart';
-import 'package:meteo_app_notification/weather/data/models/city_info_model.dart';
-import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
+import 'package:meteo_app_notification/favorite/data/models/favorite_city_model.dart';
+import 'package:meteo_app_notification/favorite/di/favorite_city_provider.dart';
 import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
 
 class ToggleNotificationButton extends ConsumerWidget {
@@ -20,7 +20,7 @@ class ToggleNotificationButton extends ConsumerWidget {
       data: (cities) {
         final cityInfo = cities.firstWhere(
           (favoriteCity) => favoriteCity.name == city,
-          orElse: () => CityInfo(
+          orElse: () => FavoriteCityModel(
             name: city,
             notificationEnabled: false,
           ),

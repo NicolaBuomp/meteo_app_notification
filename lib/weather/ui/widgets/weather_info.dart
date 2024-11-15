@@ -1,5 +1,3 @@
-// lib/weather/ui/widgets/weather_info.dart
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meteo_app_notification/weather/ui/widgets/toggle_city_actions.dart';

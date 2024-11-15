@@ -1,15 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meteo_app_notification/weather/data/models/city_info_model.dart';
-import 'package:meteo_app_notification/weather/services/city_info_service.dart';
+import 'package:meteo_app_notification/favorite/data/models/favorite_city_model.dart';
+import 'package:meteo_app_notification/favorite/services/favority_city_service.dart';
 
-class CityInfoViewModel extends StateNotifier<AsyncValue<List<CityInfo>>> {
-  final CityInfoService _cityInfoService;
+class FavoriteCityViewModel
+    extends StateNotifier<AsyncValue<List<FavoriteCityModel>>> {
+  final FavoriteCityService _cityInfoService;
 
-  CityInfoViewModel(this._cityInfoService) : super(const AsyncValue.loading()) {
+  FavoriteCityViewModel(this._cityInfoService)
+      : super(const AsyncValue.loading()) {
     _loadCityInfo();
   }
 
-  /// Carica le città dal servizio e aggiorna lo stato.
   Future<void> _loadCityInfo() async {
     try {
       final cities = await _cityInfoService.loadCityInfo();
@@ -23,7 +24,7 @@ class CityInfoViewModel extends StateNotifier<AsyncValue<List<CityInfo>>> {
   Future<void> addCity(String cityName) async {
     final currentState = state.value ?? [];
     if (!currentState.any((c) => c.name == cityName)) {
-      final updatedList = [...currentState, CityInfo(name: cityName)];
+      final updatedList = [...currentState, FavoriteCityModel(name: cityName)];
       state = AsyncValue.data(updatedList);
       await _cityInfoService.saveCityInfo(updatedList);
     }
@@ -42,7 +43,7 @@ class CityInfoViewModel extends StateNotifier<AsyncValue<List<CityInfo>>> {
     final currentState = state.value ?? [];
     final updatedList = currentState.map((city) {
       if (city.name == cityName) {
-        return CityInfo(
+        return FavoriteCityModel(
           name: city.name,
           notificationEnabled: !city.notificationEnabled,
           latitude: city.latitude,
@@ -63,7 +64,7 @@ class CityInfoViewModel extends StateNotifier<AsyncValue<List<CityInfo>>> {
     final currentState = state.value ?? [];
     final updatedList = currentState.map((city) {
       if (city.name == cityName) {
-        return CityInfo(
+        return FavoriteCityModel(
           name: city.name,
           notificationEnabled: city.notificationEnabled,
           latitude: city.latitude,

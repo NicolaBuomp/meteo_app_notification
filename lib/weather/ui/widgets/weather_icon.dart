@@ -1,5 +1,3 @@
-// weather_icon_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:meteo_app_notification/weather/helpers/weather_icon_helper.dart';
 import 'package:weather_icons/weather_icons.dart';

@@ -1,5 +1,3 @@
-// lib/weather/data/models/condition_model.dart
-
 class WeatherCondition {
   final String text;
   final String iconUrl;

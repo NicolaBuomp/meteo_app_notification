@@ -35,8 +35,7 @@ class MyApp extends ConsumerWidget {
           themeMode: themeMode,
           supportedLocales: AppLocaleUtils.supportedLocales,
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          locale: TranslationProvider.of(context)
-              .flutterLocale, // Aggiorna locale dinamicamente
+          locale: TranslationProvider.of(context).flutterLocale,
         ),
       ),
     );

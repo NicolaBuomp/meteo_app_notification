@@ -1,5 +1,3 @@
-// lib/weather/ui/widgets/weather_content.dart
-
 import 'package:flutter/material.dart';
 import 'weather_info.dart';
 import 'weather_forecast.dart';
