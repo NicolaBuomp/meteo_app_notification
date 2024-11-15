@@ -1,3 +1,5 @@
+// lib/weather/services/weather_notification_service.dart
+
 import 'package:meteo_app_notification/weather/data/models/models.dart';
 import '../../services/notifications/local_notifications_services.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +25,8 @@ class WeatherNotificationService {
 
       for (final hour in dailyForecast.hourly) {
         final currentTime =
-            DateTime.fromMillisecondsSinceEpoch(hour.time * 1000).toLocal();
+            DateTime.fromMillisecondsSinceEpoch(hour.timeEpoch * 1000)
+                .toLocal();
 
         if (currentTime.isAfter(now) || _isSameHour(currentTime, now)) {
           if (hour.chanceOfRain >= 70) {
@@ -65,7 +68,7 @@ class WeatherNotificationService {
     if (highRainHours.isEmpty) return intervals;
 
     // Ordina le ore per tempo (nel caso non siano già ordinate)
-    highRainHours.sort((a, b) => a.time.compareTo(b.time));
+    highRainHours.sort((a, b) => a.timeEpoch.compareTo(b.timeEpoch));
 
     DateTime? intervalStart;
     DateTime? intervalEnd;
@@ -73,7 +76,7 @@ class WeatherNotificationService {
     for (int i = 0; i < highRainHours.length; i++) {
       final currentHour = highRainHours[i];
       final currentTime =
-          DateTime.fromMillisecondsSinceEpoch(currentHour.time * 1000)
+          DateTime.fromMillisecondsSinceEpoch(currentHour.timeEpoch * 1000)
               .toLocal();
 
       if (intervalStart == null) {
@@ -84,7 +87,7 @@ class WeatherNotificationService {
         // Verifica se l'ora corrente è consecutiva all'ora precedente
         final previousHour = highRainHours[i - 1];
         final previousTime =
-            DateTime.fromMillisecondsSinceEpoch(previousHour.time * 1000)
+            DateTime.fromMillisecondsSinceEpoch(previousHour.timeEpoch * 1000)
                 .toLocal();
 
         if (currentTime.difference(previousTime).inHours == 1) {

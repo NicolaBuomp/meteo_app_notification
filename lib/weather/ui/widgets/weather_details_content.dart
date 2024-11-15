@@ -8,29 +8,32 @@ class WeatherDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final current = weather.current;
+    final todayForecast = weather.forecast.first;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${weather.location}, ${weather.region}, ${weather.country}',
+            '${weather.location.name}, ${weather.location.region}, ${weather.location.country}',
             style: const TextStyle(
                 fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           const SizedBox(height: 16),
-          _buildDetailRow('Temperature:', '${weather.temperature}°C'),
-          _buildDetailRow('Feels Like:', '${weather.feelsLike}°C'),
-          _buildDetailRow('Condition:', weather.condition),
-          _buildDetailRow('Humidity:', '${weather.humidity}%'),
-          _buildDetailRow('Wind Speed:', '${weather.windSpeed} km/h'),
-          _buildDetailRow('UV Index:', '${weather.uvIndex}'),
-          _buildDetailRow('Max Temp:', '${weather.maxTemp}°C'),
-          _buildDetailRow('Min Temp:', '${weather.minTemp}°C'),
-          _buildDetailRow('Precipitation:', '${weather.totalPrecip} mm'),
-          _buildDetailRow('Chance of Rain:', '${weather.chanceOfRain}%'),
-          _buildDetailRow('Sunrise:', weather.sunrise),
-          _buildDetailRow('Sunset:', weather.sunset),
+          _buildDetailRow('Temperature:', '${current.temperature}°C'),
+          _buildDetailRow('Feels Like:', '${current.feelsLike}°C'),
+          _buildDetailRow('Condition:', current.condition.text),
+          _buildDetailRow('Humidity:', '${current.humidity}%'),
+          _buildDetailRow('Wind Speed:', '${current.windSpeed} km/h'),
+          _buildDetailRow('UV Index:', '${current.uvIndex}'),
+          _buildDetailRow('Max Temp:', '${todayForecast.maxTemp}°C'),
+          _buildDetailRow('Min Temp:', '${todayForecast.minTemp}°C'),
+          _buildDetailRow('Precipitation:', '${todayForecast.totalPrecip} mm'),
+          _buildDetailRow('Chance of Rain:', '${todayForecast.chanceOfRain}%'),
+          _buildDetailRow('Sunrise:', todayForecast.sunrise),
+          _buildDetailRow('Sunset:', todayForecast.sunset),
         ],
       ),
     );

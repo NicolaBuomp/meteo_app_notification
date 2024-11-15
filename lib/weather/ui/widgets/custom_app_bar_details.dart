@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/toglle_city_actions.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/toggle_city_actions.dart';
 import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
 
 class CustomAppBar extends StatelessWidget {

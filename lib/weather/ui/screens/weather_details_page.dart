@@ -1,10 +1,12 @@
+// lib/weather/ui/screens/weather_details_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/custom_app_bar_details.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/weather_details_content.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/weather_forecast.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/weather_hourly_forecast.dart';
-import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
+import '../widgets/custom_app_bar_details.dart';
+import '../widgets/weather_details_content.dart';
+import '../widgets/weather_forecast.dart';
+import '../widgets/weather_hourly_forecast.dart';
+import '../../viewmodel/weather_viewmodel.dart';
 
 class WeatherDetailsPage extends ConsumerWidget {
   final String? latitude;
@@ -60,7 +62,8 @@ class WeatherDetailsPage extends ConsumerWidget {
                                   WeatherDetailsContent(weather: weather),
                                   WeatherHourlyForecast(
                                     hourly: weather.forecast.first.hourly,
-                                    localtime: weather.localtime,
+                                    localtimeEpoch:
+                                        weather.location.localtimeEpoch,
                                   ),
                                 ],
                               ),

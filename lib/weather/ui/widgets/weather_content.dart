@@ -1,40 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/fovorite_city_list.dart';
-import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
-import '../widgets/weather_info.dart';
+// lib/weather/ui/widgets/weather_content.dart
 
-class WeatherContent extends ConsumerWidget {
-  const WeatherContent({super.key});
+import 'package:flutter/material.dart';
+import 'weather_info.dart';
+import 'weather_forecast.dart';
+import 'weather_hourly_forecast.dart';
+import '../../data/models/weather_model.dart';
+
+class WeatherContent extends StatelessWidget {
+  final WeatherModel weather;
+
+  const WeatherContent({super.key, required this.weather});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final weatherState = ref.watch(weatherViewModelProvider);
-
-    return weatherState.when(
-      data: (weather) => weather != null
-          ? ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                WeatherInfo(weather: weather),
-                const SizedBox(height: 24),
-                const FavoriteCityList(),
-              ],
-            )
-          : const Center(
-              child: Text(
-                'Nessun dato disponibile',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      error: (err, stack) => Center(
-        child: Text(
-          'Errore: $err',
-          style: const TextStyle(fontSize: 18, color: Colors.red),
-        ),
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          WeatherInfo(weather: weather),
+          WeatherHourlyForecast(
+            hourly: weather.forecast.first.hourly,
+            localtimeEpoch: weather.location.localtimeEpoch,
+          ),
+          WeatherForecast(forecast: weather.forecast),
+        ],
       ),
     );
   }

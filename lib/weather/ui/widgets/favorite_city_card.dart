@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/weather/data/models/city_info_model.dart';
 import 'package:meteo_app_notification/weather/di/weather_provider.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/toglle_city_actions.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/toggle_city_actions.dart';
 
 class FavoriteCityCard extends ConsumerWidget {
   final CityInfo city;
@@ -82,11 +82,12 @@ class FavoriteCityCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _WeatherDetail(
-                      label: 'Wind', value: '${weather.windSpeed} km/h'),
+                      label: 'Wind',
+                      value: '${weather.current.windSpeed} km/h'),
                   _WeatherDetail(
-                      label: 'Temp', value: '${weather.temperature}°C'),
+                      label: 'Temp', value: '${weather.current.temperature}°C'),
                   _WeatherDetail(
-                      label: 'Humidity', value: '${weather.humidity}%'),
+                      label: 'Humidity', value: '${weather.current.humidity}%'),
                 ],
               ),
             ],
@@ -103,9 +104,9 @@ class FavoriteCityCard extends ConsumerWidget {
               children: [
                 const Icon(Icons.error, color: Colors.red, size: 24),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   'Error loading weather',
-                  style: const TextStyle(color: Colors.red, fontSize: 14),
+                  style: TextStyle(color: Colors.red, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 TextButton(

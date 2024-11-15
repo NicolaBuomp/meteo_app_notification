@@ -1,6 +1,9 @@
+// lib/weather/ui/widgets/weather_forecast.dart
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:meteo_app_notification/weather/data/models/models.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
+import '../../data/models/daily_forecast_model.dart';
 
 class WeatherForecast extends StatelessWidget {
   final List<DailyForecast> forecast;
@@ -14,9 +17,7 @@ class WeatherForecast extends StatelessWidget {
 
     // Filtra la forecast per rimuovere il giorno corrente.
     final filteredForecast = forecast.where((day) {
-      final forecastDate = DateFormat('yyyy-MM-dd')
-          .format(DateTime.fromMillisecondsSinceEpoch(day.date * 1000));
-      return forecastDate != today;
+      return day.date != today;
     }).toList();
 
     return Padding(
@@ -45,9 +46,9 @@ class WeatherForecast extends StatelessWidget {
   }
 
   Widget _buildForecastTile(DailyForecast day) {
-    String formatDate(int timestamp) {
-      final date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-      return DateFormat('EEEE').format(date); // Es. "Thursday, 14 Nov"
+    String formatDate(String dateString) {
+      final date = DateTime.parse(dateString);
+      return DateFormat('EEEE').format(date); // Es. "Thursday"
     }
 
     return Card(
@@ -55,14 +56,11 @@ class WeatherForecast extends StatelessWidget {
       color: Colors.grey[800],
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
-        leading: Image.network(
-          day.iconUrl,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.broken_image, color: Colors.grey, size: 50);
-          },
+        leading: WeatherIconWidget(
+          conditionCode: day.condition.code,
+          isDayTime: true, //Passiamo isDayTime
+          size: 35.0,
+          color: Colors.blueGrey,
         ),
         title: Text(
           formatDate(day.date),
@@ -70,12 +68,12 @@ class WeatherForecast extends StatelessWidget {
               const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          day.condition,
+          day.condition.text,
           style: const TextStyle(color: Colors.grey),
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Max: ${day.maxTemp}°C',

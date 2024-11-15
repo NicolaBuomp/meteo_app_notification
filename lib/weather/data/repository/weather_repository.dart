@@ -21,6 +21,7 @@ class WeatherRepository {
       );
 
       if (response.statusCode == 200) {
+        print('API Response: ${response.data}');
         return WeatherModel.fromJson(response.data);
       } else {
         throw Exception('Failed to load weather data');
@@ -45,6 +46,7 @@ class WeatherRepository {
       );
 
       if (response.statusCode == 200) {
+        print('API Response: ${response.data}');
         return WeatherModel.fromJson(response.data);
       } else {
         throw Exception('Failed to load weather data');

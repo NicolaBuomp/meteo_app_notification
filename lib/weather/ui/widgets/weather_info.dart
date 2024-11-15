@@ -1,8 +1,10 @@
+// lib/weather/ui/widgets/weather_info.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:meteo_app_notification/i18n/translations.dart';
-import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
-import 'package:meteo_app_notification/weather/ui/widgets/toglle_city_actions.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/toggle_city_actions.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
+import '../../data/models/weather_model.dart';
 
 class WeatherInfo extends StatelessWidget {
   final WeatherModel weather;
@@ -19,7 +21,7 @@ class WeatherInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${weather.temperature}°C',
+                '${weather.current.temperature}°C',
                 style:
                     const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
               ),
@@ -28,44 +30,28 @@ class WeatherInfo extends StatelessWidget {
           ),
           Row(
             children: [
-              Image.network(
-                weather.iconUrl,
-                height: 180,
-                width: 180,
-                fit: BoxFit.cover,
-                filterQuality: FilterQuality.high,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                    Icons.broken_image,
-                    size: 180,
-                    color: Colors.grey,
-                  );
-                },
+              WeatherIconWidget(
+                conditionCode: weather.current.condition.code,
+                isDayTime: weather.current.isDayTime,
+                size: 100.0,
+                color: Colors.blueGrey,
               ),
-              const SizedBox(width: 36),
+              const SizedBox(width: 40),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        context.translation.weather.humidity,
+                      const Text(
+                        'Umidità',
                         style: TextStyle(
                           color: Color(0xFFB5B5B5),
                         ),
                       ),
                       Text(
-                        '${weather.humidity}%',
-                        style: TextStyle(fontSize: 25),
+                        '${weather.current.humidity}%',
+                        style: const TextStyle(fontSize: 25),
                       )
                     ],
                   ),
@@ -73,15 +59,15 @@ class WeatherInfo extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        context.translation.weather.wind,
+                      const Text(
+                        'Vento',
                         style: TextStyle(
                           color: Color(0xFFB5B5B5),
                         ),
                       ),
                       Text(
-                        '${weather.windSpeed} km/h',
-                        style: TextStyle(fontSize: 25),
+                        '${weather.current.windSpeed} km/h',
+                        style: const TextStyle(fontSize: 25),
                       )
                     ],
                   ),
@@ -89,14 +75,14 @@ class WeatherInfo extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       context.push(
-                        '/weatherDetails/${weather.latitude}/${weather.longitude}',
+                        '/weatherDetails/${weather.location.latitude}/${weather.location.longitude}',
                       );
                     },
                     child: Row(
                       children: [
-                        Text(
-                          context.translation.weather.details,
-                          style: const TextStyle(
+                        const Text(
+                          'Dettagli',
+                          style: TextStyle(
                             fontSize: 18,
                             color: Color(0xFFB5B5B5),
                           ),

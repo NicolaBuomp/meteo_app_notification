@@ -16,7 +16,8 @@ class WeatherPage extends ConsumerWidget {
     String hintText = "Cerca";
     weatherState.whenData((weather) {
       if (weather != null) {
-        hintText = '${weather.location}, ${weather.region}, ${weather.country}';
+        hintText =
+            '${weather.location.name}, ${weather.location.region}, ${weather.location.country}';
       }
     });
 
@@ -53,9 +54,16 @@ class WeatherPage extends ConsumerWidget {
               ),
               Expanded(
                 child: weatherState.when(
-                  data: (weather) => WeatherContent(),
+                  data: (weather) => weather != null
+                      ? WeatherContent(weather: weather)
+                      : const Center(
+                          child: Text(
+                            'No weather data available.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                   loading: () => const Center(
-                    child: Center(child: CircularProgressIndicator()),
+                    child: CircularProgressIndicator(),
                   ),
                   error: (err, _) => Center(
                     child: Text(

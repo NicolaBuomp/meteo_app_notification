@@ -6,14 +6,6 @@ import '../data/models/weather_model.dart';
 import '../data/repository/weather_repository.dart';
 import '../services/weather_service.dart';
 
-// Classe per rappresentare un intervallo di tempo
-class TimeInterval {
-  final DateTime start;
-  final DateTime end;
-
-  TimeInterval({required this.start, required this.end});
-}
-
 class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
   final WeatherRepository _repository;
   final WeatherService _weatherService;
@@ -76,8 +68,8 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
 
   Future<void> refreshWeather({int days = 1}) async {
     if (state.value != null) {
-      final lat = state.value!.latitude;
-      final long = state.value!.longitude;
+      final lat = state.value!.location.latitude;
+      final long = state.value!.location.longitude;
       await loadWeatherByLocation(lat, long, days: days);
     }
   }

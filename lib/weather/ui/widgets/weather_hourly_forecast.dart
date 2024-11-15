@@ -1,23 +1,27 @@
+// lib/weather/ui/widgets/weather_hourly_forecast.dart
+
 import 'package:flutter/material.dart';
-import 'package:meteo_app_notification/weather/data/models/models.dart';
 import 'package:intl/intl.dart';
+import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
+import '../../data/models/hourly_forecast_model.dart';
 
 class WeatherHourlyForecast extends StatelessWidget {
   final List<HourlyForecast> hourly;
-  final int localtime;
+  final int localtimeEpoch;
 
   const WeatherHourlyForecast({
     super.key,
     required this.hourly,
-    required this.localtime,
+    required this.localtimeEpoch,
   });
 
   @override
   Widget build(BuildContext context) {
-    final currentTime = DateTime.fromMillisecondsSinceEpoch(localtime * 1000);
+    final currentTime =
+        DateTime.fromMillisecondsSinceEpoch(localtimeEpoch * 1000);
     final filteredHourly = hourly.where((hour) {
-      final hourTime = DateTime.fromMillisecondsSinceEpoch(
-          hour.time * 1000); // Usa int.parse per convertire la stringa
+      final hourTime =
+          DateTime.fromMillisecondsSinceEpoch(hour.timeEpoch * 1000);
       return hourTime.isAfter(currentTime);
     }).toList();
 
@@ -53,14 +57,14 @@ class WeatherHourlyForecast extends StatelessWidget {
 
   Widget _buildHourlyTile(HourlyForecast hour) {
     final time = DateFormat.Hm()
-        .format(DateTime.fromMillisecondsSinceEpoch(hour.time * 1000));
+        .format(DateTime.fromMillisecondsSinceEpoch(hour.timeEpoch * 1000));
 
     return Card(
       elevation: 0,
       color: Colors.grey[800],
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: SizedBox(
-        width: 60, // Imposta una larghezza fissa
+        width: 60,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -74,20 +78,16 @@ class WeatherHourlyForecast extends StatelessWidget {
                     fontSize: 12),
               ),
               const SizedBox(height: 4),
-              Image.network(
-                hour.iconUrl,
-                width: 30, // Riduci dimensione immagine
-                height: 30,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.broken_image, color: Colors.grey);
-                },
+              WeatherIconWidget(
+                conditionCode: hour.condition.code,
+                isDayTime: hour.isDayTime, //Passiamo isDayTime
+                size: 20.0,
+                color: Colors.blueGrey,
               ),
               const SizedBox(height: 4),
               Text(
                 '${hour.tempC}°C',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12), // Riduci dimensione testo
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
             ],
           ),
