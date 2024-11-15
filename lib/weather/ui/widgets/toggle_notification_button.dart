@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/base/widgets/custom_snack_bar.dart';
 import 'package:meteo_app_notification/weather/data/models/city_info_model.dart';
 import 'package:meteo_app_notification/weather/di/city_info_provider.dart';
+import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
 
 class ToggleNotificationButton extends ConsumerWidget {
   final String city;
@@ -47,6 +48,7 @@ class ToggleNotificationButton extends ConsumerWidget {
       onPressed: () {
         if (isCityInFavorites) {
           ref.read(cityInfoViewModelProvider.notifier).toggleNotification(city);
+          ref.read(weatherViewModelProvider.notifier).dailyRainCheck();
         } else {
           CustomSnackBar.show(
             context,

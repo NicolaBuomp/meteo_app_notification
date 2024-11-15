@@ -119,12 +119,14 @@ class HourlyForecast {
   final double tempC;
   final String condition;
   final String iconUrl;
+  final int chanceOfRain;
 
   HourlyForecast({
     required this.time,
     required this.tempC,
     required this.condition,
     required this.iconUrl,
+    required this.chanceOfRain,
   });
 
   factory HourlyForecast.fromJson(Map<String, dynamic> json) {
@@ -133,6 +135,7 @@ class HourlyForecast {
       tempC: json['temp_c'] ?? 0.0,
       condition: json['condition']?['text'] ?? '',
       iconUrl: "https:${json['condition']?['icon'] ?? ''}",
+      chanceOfRain: json['chance_of_rain'] ?? 0,
     );
   }
 }

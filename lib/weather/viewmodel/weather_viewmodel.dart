@@ -1,15 +1,29 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:meteo_app_notification/services/notifications/local_notifications_services.dart';
+import 'package:meteo_app_notification/weather/services/weather_notification_service.dart';
 import '../data/models/weather_model.dart';
 import '../data/repository/weather_repository.dart';
 import '../services/weather_service.dart';
 
+// Classe per rappresentare un intervallo di tempo
+class TimeInterval {
+  final DateTime start;
+  final DateTime end;
+
+  TimeInterval({required this.start, required this.end});
+}
+
 class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
   final WeatherRepository _repository;
   final WeatherService _weatherService;
+  final WeatherNotificationService _notificationService;
 
-  WeatherViewModel(this._repository, this._weatherService)
-      : super(const AsyncValue.loading()) {
+  WeatherViewModel(
+    this._repository,
+    this._weatherService,
+    this._notificationService,
+  ) : super(const AsyncValue.loading()) {
     _initializeWeatherData();
   }
 
@@ -44,7 +58,7 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     try {
       final weather =
           await _repository.getWeatherByCoordinates(latitude, longitude, days);
-      await _weatherService.saveWeatherData(weather); // Salva nella cache
+      await _weatherService.saveWeatherData(weather);
       state = AsyncValue.data(weather);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
@@ -98,11 +112,26 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     state = const AsyncValue.data(null);
     await _weatherService.clearWeatherCache();
   }
+
+  Future<void> dailyRainCheck() async {
+    try {
+      if (state.value != null) {
+        await _notificationService.checkDailyRain(state.value!);
+      }
+    } catch (e) {
+      print('Errore durante il controllo della pioggia: $e');
+    }
+  }
 }
 
 final weatherViewModelProvider =
     StateNotifierProvider<WeatherViewModel, AsyncValue<WeatherModel?>>((ref) {
   final repository = WeatherRepository();
   final weatherService = WeatherService();
-  return WeatherViewModel(repository, weatherService);
+  final localNotificationsService = LocalNotificationsService();
+  final weatherNotificationService =
+      WeatherNotificationService(localNotificationsService);
+
+  return WeatherViewModel(
+      repository, weatherService, weatherNotificationService);
 });

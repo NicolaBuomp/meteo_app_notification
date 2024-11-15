@@ -93,6 +93,7 @@ class WeatherService {
                 tempC: hour['tempC'],
                 condition: hour['condition'],
                 iconUrl: hour['iconUrl'],
+                chanceOfRain: hour['chanceOfRain'],
               );
             }).toList(),
           );

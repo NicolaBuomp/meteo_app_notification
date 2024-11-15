@@ -5,9 +5,13 @@ import 'package:meteo_app_notification/base/router/router.dart';
 import 'package:meteo_app_notification/base/theme/app_theme.dart';
 import 'package:meteo_app_notification/base/viewmodel/theme_viewmodel.dart';
 import 'package:meteo_app_notification/i18n/translations.dart';
+import 'package:meteo_app_notification/services/notifications/local_notifications_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inizializzazione del servizio notifiche
+  await LocalNotificationsService().initialize();
 
   runApp(
     ProviderScope(child: MyApp()),
