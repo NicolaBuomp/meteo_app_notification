@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
+import 'package:meteo_app_notification/weather/data/models/models.dart';
 
 class WeatherForecast extends StatelessWidget {
   final List<DailyForecast> forecast;

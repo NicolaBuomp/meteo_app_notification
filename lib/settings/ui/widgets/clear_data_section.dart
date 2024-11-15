@@ -13,7 +13,7 @@ class ClearDataSection extends ConsumerWidget {
     final weatherViewModel = ref.read(weatherViewModelProvider.notifier);
     final cityInfoViewModel = ref.read(cityInfoViewModelProvider.notifier);
 
-    Future<void> _clearData({
+    Future<void> clearData({
       required Future<void> Function() clearFunction,
       required String successMessage,
       IconData icon = Icons.info,
@@ -41,7 +41,7 @@ class ClearDataSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ElevatedButton(
-          onPressed: () => _clearData(
+          onPressed: () => clearData(
             clearFunction: weatherViewModel.clearWeatherData,
             successMessage:
                 context.translation.settings.actions.clear_weather_confirmation,
@@ -53,7 +53,7 @@ class ClearDataSection extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () => _clearData(
+          onPressed: () => clearData(
             clearFunction: cityInfoViewModel.removeAll,
             successMessage: context
                 .translation.settings.actions.clear_favorites_confirmation,
@@ -66,7 +66,7 @@ class ClearDataSection extends ConsumerWidget {
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () async {
-            await _clearData(
+            await clearData(
               clearFunction: () async {
                 await weatherViewModel.clearWeatherData();
                 await cityInfoViewModel.removeAll();

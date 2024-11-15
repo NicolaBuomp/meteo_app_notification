@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'package:meteo_app_notification/weather/data/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/models/weather_model.dart';
 
 class WeatherService {
   static const String _cacheWeatherData = 'cachedWeatherData';

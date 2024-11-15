@@ -1,111 +1,127 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
+import 'app_text_styles.dart';
 
 class AppTheme {
-  static const Color lightPrimaryColor = Color(0xFF6F62FD);
-  static const Color lightBackgroundColor = Color(0xFF6F62FD);
-  static const Color darkPrimaryColor = Color.fromARGB(255, 35, 26, 130);
-  static const Color darkBackgroundColor = Color.fromARGB(255, 36, 27, 133);
-
   static final ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primaryColor: const Color(0xFF5397E1), // Blu chiaro
-    scaffoldBackgroundColor: const Color(0xFF695CEC), // Sfondo blu chiaro
+    scaffoldBackgroundColor: AppColors.lightBackground,
     colorScheme: ColorScheme.light(
-      primary: const Color(0xFF695CEC), // Blu primario
-      onPrimary: Colors.white, // Testo bianco su elementi primari
-      secondary: const Color(0xFF8AA0F8), // Blu ancora più chiaro
-      onSecondary: Colors.white, // Testo su secondario
-      surface: Colors.white,
-      onSurface: const Color(0xFF695CEC),
+      primary: AppColors.lightPrimary,
+      onPrimary: AppColors.white,
+      secondary: AppColors.lightAccent,
+      onSecondary: AppColors.white,
+      surface: AppColors.lightCard,
+      onSurface: AppColors.lightText,
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF6631BD),
-        foregroundColor: Colors.white, // Colore del testo
-        padding: const EdgeInsets.symmetric(
-            horizontal: 24, vertical: 12), // Padding interno
-        textStyle: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500), // Stile del testo
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Angoli arrotondati
-        ),
-      ),
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+    appBarTheme: AppBarTheme(
+      color: AppColors.lightPrimary,
       elevation: 0,
-      iconTheme: IconThemeData(color: Colors.white),
-      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+      iconTheme: IconThemeData(color: AppColors.white),
+      titleTextStyle: AppTextStyles.headlineSmallLight,
     ),
-    cardTheme: const CardTheme(
-      color: Color(0xFF6631BD), // Sfondo bianco per le card
-      elevation: 4, // Elevazione per effetto ombra
-      margin: EdgeInsets.all(12),
-      shape: RoundedRectangleBorder(
+    textTheme: TextTheme(
+      headlineLarge: AppTextStyles.headlineLargeLight,
+      headlineSmall: AppTextStyles.headlineSmallLight,
+      bodyLarge: AppTextStyles.bodyLargeLight,
+      bodyMedium: AppTextStyles.bodyMediumLight,
+    ),
+    cardTheme: CardTheme(
+      color: AppColors.lightCard,
+      elevation: 4,
+      margin: const EdgeInsets.all(12),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
     ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Colors.white),
-      headlineLarge: TextStyle(color: Colors.white, fontSize: 40),
-      headlineSmall: TextStyle(color: Colors.white, fontSize: 20),
-    ),
-    radioTheme: RadioThemeData(
-      fillColor: WidgetStateProperty.all(Colors.white),
-      overlayColor: WidgetStateProperty.all(Colors.white.withOpacity(0.1)),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all<Color>(AppColors.lightAccent),
+        foregroundColor: WidgetStateProperty.all<Color>(AppColors.white),
+        padding: WidgetStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
+        textStyle: WidgetStateProperty.all<TextStyle>(
+          AppTextStyles.bodyLargeLight.copyWith(fontWeight: FontWeight.w500),
+        ),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 16, color: Colors.white),
+      style: ButtonStyle(
+        foregroundColor:
+            MaterialStateProperty.all<Color>(AppColors.lightPrimary),
+        textStyle: MaterialStateProperty.all<TextStyle>(
+          AppTextStyles.bodyLargeLight,
+        ),
       ),
+    ),
+    radioTheme: RadioThemeData(
+      fillColor: WidgetStateProperty.all<Color>(AppColors.lightPrimary),
     ),
   );
 
   static final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: const Color(0xFF6A5AE0), // Viola scuro
-    scaffoldBackgroundColor: const Color(0xFF0B1131), // Blu notte
+    scaffoldBackgroundColor: AppColors.darkBackground,
     colorScheme: ColorScheme.dark(
-      primary: const Color(0xFF6A5AE0), // Viola primario
-      onPrimary: Colors.white, // Testo bianco su elementi primari
-      secondary: const Color(0xFF8AA0F8), // Blu chiaro per elementi secondari
-      onSecondary: Colors.white, // Testo su secondario
-      surface: const Color(0xFF6A5AE0), // Sfondo delle card
-      onSurface: Colors.white, // Testo su superfici
+      primary: AppColors.darkPrimary,
+      onPrimary: AppColors.white,
+      secondary: AppColors.darkAccent,
+      onSecondary: AppColors.white,
+      surface: AppColors.darkCard,
+      onSurface: AppColors.darkText,
+      // background: AppColors.darkBackground, // Rimosso perché deprecato
+    ),
+    appBarTheme: AppBarTheme(
+      color: AppColors.darkPrimary,
+      elevation: 0,
+      iconTheme: IconThemeData(color: AppColors.white),
+      titleTextStyle: AppTextStyles.headlineSmallDark,
+    ),
+    textTheme: TextTheme(
+      headlineLarge: AppTextStyles.headlineLargeDark,
+      headlineSmall: AppTextStyles.headlineSmallDark,
+      bodyLarge: AppTextStyles.bodyLargeDark,
+      bodyMedium: AppTextStyles.bodyMediumDark,
+    ),
+    cardTheme: CardTheme(
+      color: AppColors.darkCard,
+      elevation: 4,
+      margin: const EdgeInsets.all(12),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            const Color.fromARGB(255, 46, 45, 51), // Colore di sfondo
-        foregroundColor: Colors.white, // Colore del testo
-        padding: const EdgeInsets.symmetric(
-            horizontal: 24, vertical: 12), // Padding interno
-        textStyle: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500), // Stile del testo
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Angoli arrotondati
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all<Color>(AppColors.darkAccent),
+        foregroundColor: WidgetStateProperty.all<Color>(AppColors.darkText),
+        padding: WidgetStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
+        textStyle: WidgetStateProperty.all<TextStyle>(
+          AppTextStyles.bodyLargeDark.copyWith(fontWeight: FontWeight.w500),
+        ),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       ),
     ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      iconTheme: IconThemeData(color: Colors.white),
-      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white), // Testo bianco per body
-      bodyMedium: TextStyle(color: Colors.white),
-      headlineLarge:
-          TextStyle(color: Colors.white, fontSize: 40), // Testo titoli
-      headlineSmall: TextStyle(color: Colors.white, fontSize: 20),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all<Color>(AppColors.darkAccent),
+        textStyle: WidgetStateProperty.all<TextStyle>(
+          AppTextStyles.bodyLargeDark,
+        ),
+      ),
     ),
     radioTheme: RadioThemeData(
-      fillColor:
-          WidgetStateProperty.all(const Color(0xFF6A5AE0)), // Stile scuro
-      overlayColor:
-          WidgetStateProperty.all(const Color(0xFF6A5AE0).withOpacity(0.1)),
+      fillColor: WidgetStateProperty.all<Color>(AppColors.darkAccent),
     ),
   );
 }

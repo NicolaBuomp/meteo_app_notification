@@ -1,3 +1,5 @@
+import 'package:meteo_app_notification/weather/data/models/models.dart';
+
 class WeatherModel {
   final String location;
   final String region;
@@ -45,97 +47,69 @@ class WeatherModel {
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return WeatherModel(
-      location: json['location']?['name'] ?? '',
-      region: json['location']?['region'] ?? '',
-      country: json['location']?['country'] ?? '',
-      localtime: json['location']?['localtime_epoch'] ?? 0,
-      latitude: json['location']?['lat'] ?? 0.0,
-      longitude: json['location']?['lon'] ?? 0.0,
-      temperature: json['current']?['temp_c'] ?? 0.0,
-      condition: json['current']?['condition']?['text'] ?? '',
-      iconUrl: "https:${json['current']?['condition']?['icon'] ?? ''}",
-      humidity: json['current']?['humidity'] ?? 0,
-      windSpeed: json['current']?['wind_kph'] ?? 0.0,
-      feelsLike: json['current']?['feelslike_c'] ?? 0.0,
-      uvIndex: json['current']?['uv'] ?? 0.0,
+      location: json['location']?['name'] as String? ?? 'Unknown',
+      region: json['location']?['region'] as String? ?? '',
+      country: json['location']?['country'] as String? ?? '',
+      localtime: json['location']?['localtime_epoch'] != null
+          ? json['location']['localtime_epoch'] as int
+          : 0,
+      latitude: json['location']?['lat'] != null
+          ? (json['location']['lat'] as num).toDouble()
+          : 0.0,
+      longitude: json['location']?['lon'] != null
+          ? (json['location']['lon'] as num).toDouble()
+          : 0.0,
+      temperature: json['current']?['temp_c'] != null
+          ? (json['current']['temp_c'] as num).toDouble()
+          : 0.0,
+      condition: json['current']?['condition']?['text'] as String? ?? 'N/A',
+      iconUrl: json['current']?['condition']?['icon'] != null
+          ? "https:${json['current']['condition']['icon']}"
+          : '',
+      humidity: json['current']?['humidity'] != null
+          ? json['current']['humidity'] as int
+          : 0,
+      windSpeed: json['current']?['wind_kph'] != null
+          ? (json['current']['wind_kph'] as num).toDouble()
+          : 0.0,
+      feelsLike: json['current']?['feelslike_c'] != null
+          ? (json['current']['feelslike_c'] as num).toDouble()
+          : 0.0,
+      uvIndex: json['current']?['uv'] != null
+          ? (json['current']['uv'] as num).toDouble()
+          : 0.0,
       maxTemp:
-          json['forecast']?['forecastday']?[0]?['day']?['maxtemp_c'] ?? 0.0,
+          json['forecast']?['forecastday']?[0]?['day']?['maxtemp_c'] != null
+              ? (json['forecast']['forecastday'][0]['day']['maxtemp_c'] as num)
+                  .toDouble()
+              : 0.0,
       minTemp:
-          json['forecast']?['forecastday']?[0]?['day']?['mintemp_c'] ?? 0.0,
+          json['forecast']?['forecastday']?[0]?['day']?['mintemp_c'] != null
+              ? (json['forecast']['forecastday'][0]['day']['mintemp_c'] as num)
+                  .toDouble()
+              : 0.0,
       totalPrecip: json['forecast']?['forecastday']?[0]?['day']
-              ?['totalprecip_mm'] ??
-          0.0,
+                  ?['totalprecip_mm'] !=
+              null
+          ? (json['forecast']['forecastday'][0]['day']['totalprecip_mm'] as num)
+              .toDouble()
+          : 0.0,
       chanceOfRain: json['forecast']?['forecastday']?[0]?['day']
-              ?['daily_chance_of_rain'] ??
-          0,
-      sunrise: json['forecast']?['forecastday']?[0]?['astro']?['sunrise'] ?? '',
-      sunset: json['forecast']?['forecastday']?[0]?['astro']?['sunset'] ?? '',
-      forecast: (json['forecast']?['forecastday'] as List<dynamic>? ?? [])
-          .map((day) => DailyForecast.fromJson(day))
-          .toList(),
-    );
-  }
-}
-
-class DailyForecast {
-  final int date;
-  final double maxTemp;
-  final double minTemp;
-  final double totalPrecip;
-  final int chanceOfRain;
-  final String condition;
-  final String iconUrl;
-  final List<HourlyForecast> hourly;
-
-  DailyForecast({
-    required this.date,
-    required this.maxTemp,
-    required this.minTemp,
-    required this.totalPrecip,
-    required this.chanceOfRain,
-    required this.condition,
-    required this.iconUrl,
-    required this.hourly,
-  });
-
-  factory DailyForecast.fromJson(Map<String, dynamic> json) {
-    return DailyForecast(
-      date: json['date_epoch'] ?? 0,
-      maxTemp: json['day']?['maxtemp_c'] ?? 0.0,
-      minTemp: json['day']?['mintemp_c'] ?? 0.0,
-      totalPrecip: json['day']?['totalprecip_mm'] ?? 0.0,
-      chanceOfRain: json['day']?['daily_chance_of_rain'] ?? 0,
-      condition: json['day']?['condition']?['text'] ?? '',
-      iconUrl: "https:${json['day']?['condition']?['icon'] ?? ''}",
-      hourly: (json['hour'] as List<dynamic>? ?? [])
-          .map((hour) => HourlyForecast.fromJson(hour))
-          .toList(),
-    );
-  }
-}
-
-class HourlyForecast {
-  final int time;
-  final double tempC;
-  final String condition;
-  final String iconUrl;
-  final int chanceOfRain;
-
-  HourlyForecast({
-    required this.time,
-    required this.tempC,
-    required this.condition,
-    required this.iconUrl,
-    required this.chanceOfRain,
-  });
-
-  factory HourlyForecast.fromJson(Map<String, dynamic> json) {
-    return HourlyForecast(
-      time: json['time_epoch'] ?? 0,
-      tempC: json['temp_c'] ?? 0.0,
-      condition: json['condition']?['text'] ?? '',
-      iconUrl: "https:${json['condition']?['icon'] ?? ''}",
-      chanceOfRain: json['chance_of_rain'] ?? 0,
+                  ?['daily_chance_of_rain'] !=
+              null
+          ? json['forecast']['forecastday'][0]['day']['daily_chance_of_rain']
+              as int
+          : 0,
+      sunrise: json['forecast']?['forecastday']?[0]?['astro']?['sunrise']
+              as String? ??
+          '',
+      sunset: json['forecast']?['forecastday']?[0]?['astro']?['sunset']
+              as String? ??
+          '',
+      forecast: (json['forecast']?['forecastday'] as List<dynamic>?)
+              ?.map((day) => DailyForecast.fromJson(day))
+              .toList() ??
+          [],
     );
   }
 }

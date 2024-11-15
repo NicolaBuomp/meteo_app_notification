@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
+import 'package:meteo_app_notification/weather/data/models/models.dart';
 import 'package:intl/intl.dart';
 
 class WeatherHourlyForecast extends StatelessWidget {

@@ -1,8 +1,7 @@
-import '../data/models/weather_model.dart';
+import 'package:meteo_app_notification/weather/data/models/models.dart';
 import '../../services/notifications/local_notifications_services.dart';
 import 'package:intl/intl.dart';
 
-// Classe per rappresentare un intervallo di tempo
 class TimeInterval {
   final DateTime start;
   final DateTime end;
@@ -102,9 +101,7 @@ class WeatherNotificationService {
       }
 
       // Se siamo all'ultima iterazione, aggiungi l'intervallo corrente
-      if (i == highRainHours.length - 1 &&
-          intervalStart != null &&
-          intervalEnd != null) {
+      if (i == highRainHours.length - 1) {
         intervals.add(TimeInterval(start: intervalStart, end: intervalEnd));
       }
     }
