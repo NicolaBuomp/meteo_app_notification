@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meteo_app_notification/weather/helpers/weather_city_name_helper.dart';
 import '../../data/models/weather_model.dart';
 import '../../viewmodel/weather_viewmodel.dart';
 import 'custom_search_input.dart';
@@ -34,20 +35,6 @@ class _WeatherContentState extends ConsumerState<WeatherContent> {
   @override
   Widget build(BuildContext context) {
     final weatherState = ref.watch(weatherViewModelProvider);
-    String hintText = 'Cerca...';
-
-    if (weatherState.weather?.location != null) {
-      final name = weatherState.weather?.location.name;
-      final region = weatherState.weather?.location.region;
-      final country = weatherState.weather?.location.country;
-
-      hintText = [
-        if (name != null && name.isNotEmpty) name,
-        if (region != null && region.isNotEmpty) region,
-        if (country != null && country.isNotEmpty) country,
-      ].join(', ');
-    }
-
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -56,7 +43,8 @@ class _WeatherContentState extends ConsumerState<WeatherContent> {
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: CustomSearchInput(
               controller: searchController,
-              hintText: hintText,
+              hintText: getCityNameText(weatherState.weather),
+              maxResults: 3,
               onLeadingIconTap: () async {
                 await ref
                     .read(weatherViewModelProvider.notifier)

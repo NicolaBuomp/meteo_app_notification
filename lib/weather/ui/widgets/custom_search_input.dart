@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meteo_app_notification/weather/helpers/weather_city_name_helper.dart';
 import 'package:meteo_app_notification/weather/viewmodel/weather_viewmodel.dart';
 import 'package:meteo_app_notification/weather/data/models/search_city_model.dart';
 
@@ -10,6 +10,7 @@ class CustomSearchInput extends ConsumerStatefulWidget {
   final String hintText;
   final void Function(SearchCityModel)? onCitySelected;
   final VoidCallback? onLeadingIconTap;
+  final int? maxResults;
 
   const CustomSearchInput({
     super.key,
@@ -17,6 +18,7 @@ class CustomSearchInput extends ConsumerStatefulWidget {
     required this.hintText,
     this.onCitySelected,
     this.onLeadingIconTap,
+    this.maxResults = 5,
   });
 
   @override
@@ -25,8 +27,6 @@ class CustomSearchInput extends ConsumerStatefulWidget {
 
 class _CustomSearchInputState extends ConsumerState<CustomSearchInput> {
   Timer? _debounce;
-  List<SearchCityModel> _searchResults = [];
-  bool _isLoading = false;
   late FocusNode _focusNode;
 
   @override
@@ -39,31 +39,12 @@ class _CustomSearchInputState extends ConsumerState<CustomSearchInput> {
   void _onTextChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
+    _debounce = Timer(const Duration(milliseconds: 400), () {
       final query = widget.controller.text.trim();
-      if (query.isNotEmpty) {
-        setState(() {
-          _isLoading = true;
-        });
-        try {
-          final results = await ref
-              .read(weatherViewModelProvider.notifier)
-              .searchCities(query);
-
-          setState(() {
-            _searchResults = results;
-            _isLoading = false;
-          });
-        } catch (e) {
-          setState(() {
-            _searchResults = [];
-            _isLoading = false;
-          });
-        }
+      if (query.length >= 3) {
+        ref.read(weatherViewModelProvider.notifier).searchCities(query);
       } else {
-        setState(() {
-          _searchResults = [];
-        });
+        ref.read(weatherViewModelProvider.notifier).clearSearchResults();
       }
     });
   }
@@ -78,6 +59,8 @@ class _CustomSearchInputState extends ConsumerState<CustomSearchInput> {
 
   @override
   Widget build(BuildContext context) {
+    final weatherState = ref.watch(weatherViewModelProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -129,41 +112,27 @@ class _CustomSearchInputState extends ConsumerState<CustomSearchInput> {
             ],
           ),
         ),
-        if (_isLoading)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Center(child: CircularProgressIndicator()),
-          ),
-        if (_searchResults.isNotEmpty)
+        if (weatherState.searchResults.isNotEmpty)
           Container(
             margin: const EdgeInsets.only(top: 8),
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: _searchResults.length,
+              itemCount: weatherState.searchResults.length,
               itemBuilder: (context, index) {
-                final city = _searchResults[index];
-                String title = '';
-                final name = city.name;
-                final region = city.region;
-                final country = city.country;
+                final city = weatherState.searchResults[index];
 
-                title = [
-                  if (name.isNotEmpty) name,
-                  if (region.isNotEmpty) region,
-                  if (country.isNotEmpty) country,
-                ].join(', ');
                 return ListTile(
                   title: Text(
-                    title,
+                    getSearchCityNameText(city),
                   ),
                   onTap: () {
                     widget.onCitySelected?.call(city);
-                    setState(() {
-                      _searchResults = [];
-                      widget.controller.clear();
-                      _focusNode.unfocus();
-                    });
+                    ref
+                        .read(weatherViewModelProvider.notifier)
+                        .clearSearchResults();
+                    widget.controller.clear();
+                    _focusNode.unfocus();
                   },
                 );
               },

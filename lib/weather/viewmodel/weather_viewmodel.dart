@@ -7,6 +7,17 @@ import 'package:meteo_app_notification/weather/data/repository/weather_repositor
 import 'package:meteo_app_notification/weather/services/weather_service.dart';
 import 'package:meteo_app_notification/weather/services/weather_notification_service.dart';
 
+// Custom Exceptions
+class NetworkException implements Exception {
+  final String message;
+  NetworkException([this.message = 'Network error occurred']);
+}
+
+class LocationException implements Exception {
+  final String message;
+  LocationException([this.message = 'Location service error']);
+}
+
 class WeatherState {
   final bool isLoading;
   final List<SearchCityModel> searchResults;
@@ -57,19 +68,21 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
       }
       await loadWeatherWithPermission();
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = state.copyWith(error: _mapErrorMessage(e), isLoading: false);
     }
   }
 
   /// Carica i dati meteo per una città specifica.
   Future<void> loadWeatherByCity(String cityName, {int days = 3}) async {
     try {
-      state = state.copyWith(isLoading: true);
+      state = state.copyWith(isLoading: true, error: null);
       final weather = await _repository.getWeatherByCity(cityName, days);
+
       await _weatherService.saveWeatherData(weather);
       state = state.copyWith(weather: weather, isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = state.copyWith(
+          isLoading: false, error: _mapErrorMessage(e), weather: null);
     }
   }
 
@@ -77,13 +90,21 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
   Future<void> loadWeatherByLocation(double latitude, double longitude,
       {int days = 3}) async {
     try {
-      state = state.copyWith(isLoading: true);
+      state = state.copyWith(isLoading: true, error: null);
+
       final weather =
           await _repository.getWeatherByCoordinates(latitude, longitude, days);
+
       await _weatherService.saveWeatherData(weather);
       state = state.copyWith(weather: weather, isLoading: false);
+    } on NetworkException catch (e) {
+      state = state.copyWith(
+          isLoading: false, error: _mapErrorMessage(e), weather: null);
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = state.copyWith(
+          isLoading: false,
+          error: 'Unexpected error: ${e.toString()}',
+          weather: null);
     }
   }
 
@@ -92,8 +113,11 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
     try {
       final position = await _determinePosition();
       await loadWeatherByLocation(position.latitude, position.longitude);
+    } on LocationException catch (e) {
+      state = state.copyWith(error: _mapErrorMessage(e), isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = state.copyWith(
+          error: 'Location error: ${e.toString()}', isLoading: false);
     }
   }
 
@@ -108,26 +132,21 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
 
   /// Determina la posizione corrente dell'utente.
   Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception(
-          'I servizi di localizzazione sono disabilitati. Abilitali nelle impostazioni.');
+      throw LocationException('Location services are disabled');
     }
 
-    permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Permesso di localizzazione negato.');
+        throw LocationException('Location permission denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw Exception(
-          'Permesso negato permanentemente. Abilitalo nelle impostazioni.');
+      throw LocationException('Location permission permanently denied');
     }
 
     return await Geolocator.getCurrentPosition();
@@ -152,16 +171,23 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
 
   /// Effettua una ricerca per città in base alla query fornita.
   Future<List<SearchCityModel>> searchCities(String query) async {
-    if (query.isEmpty) {
-      state = state.copyWith(searchResults: []);
+    if (query.isEmpty || query.length < 3) {
+      state = state.copyWith(searchResults: [], error: null);
       return [];
     }
     try {
       final results = await _repository.searchCities(query);
-      state = state.copyWith(searchResults: results);
+
+      if (results.isEmpty) {
+        state = state.copyWith(
+            searchResults: [], error: 'Nessun risultato trovato per "$query"');
+      } else {
+        state = state.copyWith(searchResults: results, error: null);
+      }
+
       return results;
     } catch (e) {
-      state = state.copyWith(error: e.toString());
+      state = state.copyWith(searchResults: [], error: _mapErrorMessage(e));
       return [];
     }
   }
@@ -169,6 +195,16 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
   /// Cancella i risultati della ricerca.
   void clearSearchResults() {
     state = state.copyWith(searchResults: []);
+  }
+
+  /// Mappa gli errori in messaggi leggibili.
+  String _mapErrorMessage(dynamic error) {
+    if (error is NetworkException) {
+      return 'Network error. Check your connection.';
+    } else if (error is LocationException) {
+      return 'Location services unavailable.';
+    }
+    return 'Unexpected error: ${error.toString()}';
   }
 }
 

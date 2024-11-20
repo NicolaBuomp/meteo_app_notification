@@ -11,34 +11,56 @@ class WeatherPage extends ConsumerWidget {
     final weatherState = ref.watch(weatherViewModelProvider);
     final weatherViewModel = ref.read(weatherViewModelProvider.notifier);
 
-    if (weatherState.isLoading && weatherState.weather == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-    if (weatherState.error != null) {
-      return Scaffold(
-        body: Center(
-          child: Text('Error: ${weatherState.error}'),
-        ),
-      );
-    }
-
     return Scaffold(
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async => await weatherViewModel.refreshWeather(),
-          child: weatherState.weather == null
-              ? const Center(
-                  child: Text(
-                    'Nessun dato meteo disponibile.',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
+        child: Stack(
+          children: [
+            RefreshIndicator(
+              onRefresh: () async => await weatherViewModel.refreshWeather(),
+              child: weatherState.weather == null
+                  ? Center(
+                      child: Text(
+                        'Nessun dato meteo disponibile.',
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: WeatherContent(weather: weatherState.weather!),
+                    ),
+            ),
+
+            // Overlay di caricamento
+            if (weatherState.isLoading)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                )
-              : WeatherContent(weather: weatherState.weather!),
+                ),
+              ),
+
+            // Gestione degli errori
+            if (weatherState.error != null)
+              Positioned.fill(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Errore: ${weatherState.error}',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => weatherViewModel.refreshWeather(),
+                        child: Text('Riprova'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
