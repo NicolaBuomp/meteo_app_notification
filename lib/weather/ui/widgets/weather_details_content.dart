@@ -18,8 +18,7 @@ class WeatherDetailsContent extends StatelessWidget {
         children: [
           Text(
             '${weather.location.name}, ${weather.location.region}, ${weather.location.country}',
-            style: const TextStyle(
-                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           _buildDetailRow('Temperature:', '${current.temperature}°C'),
@@ -51,8 +50,7 @@ class WeatherDetailsContent extends StatelessWidget {
           ),
           Text(
             value,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),

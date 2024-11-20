@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/favorite/ui/widgets/fovorite_city_list.dart';
 import 'package:meteo_app_notification/favorite/di/favorite_city_provider.dart';
+import 'package:meteo_app_notification/Base/widgets/custom_snack_bar.dart';
 
 class FavoritePage extends ConsumerWidget {
   const FavoritePage({super.key});
 
+  /// Mostra una finestra di dialogo per confermare l'eliminazione di tutte le città preferite.
   void _confirmDelete(BuildContext context, VoidCallback actions) {
     showDialog(
       context: context,
@@ -36,13 +38,10 @@ class FavoritePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cityInfoViewModel = ref.read(cityInfoViewModelProvider.notifier);
-    final asyncFavoriteCities = ref.watch(cityInfoViewModelProvider);
+    final cityInfoState = ref.watch(favoriteCityViewModelProvider);
+    final cityInfoNotifier = ref.read(favoriteCityViewModelProvider.notifier);
 
-    final hasFavoriteCities = asyncFavoriteCities.maybeWhen(
-      data: (cities) => cities.isNotEmpty,
-      orElse: () => false,
-    );
+    final hasFavoriteCities = cityInfoState.cities.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +52,16 @@ class FavoritePage extends ConsumerWidget {
             onPressed: hasFavoriteCities
                 ? () => _confirmDelete(
                       context,
-                      () => cityInfoViewModel.removeAll(),
+                      () async {
+                        await cityInfoNotifier.removeAll();
+                        CustomSnackBar.show(
+                          context,
+                          message:
+                              'Tutte le città preferite sono state eliminate.',
+                          backgroundColor: Colors.red,
+                          icon: Icons.delete,
+                        );
+                      },
                     )
                 : null,
             color: Colors.red,
@@ -61,9 +69,11 @@ class FavoritePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-        child: FavoriteCityList(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        child: cityInfoState.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : const FavoriteCityList(),
       ),
     );
   }

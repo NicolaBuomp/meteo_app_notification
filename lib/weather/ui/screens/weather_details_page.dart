@@ -24,63 +24,72 @@ class WeatherDetailsPage extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (latitude != null && longitude != null) {
         weatherViewModel.loadWeatherByLocation(
-            double.parse(latitude!), double.parse(longitude!),
-            days: 3);
+          double.parse(latitude!),
+          double.parse(longitude!),
+          days: 3,
+        );
       }
     });
+
+    if (weatherState.isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (weatherState.error != null) {
+      return Scaffold(
+        body: Center(
+          child: Text('Error: ${weatherState.error}'),
+        ),
+      );
+    }
+
+    if (weatherState.weather == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('No weather data available.'),
+        ),
+      );
+    }
+
+    final weather = weatherState.weather!;
 
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: weatherViewModel.refreshWeather,
-          child: weatherState.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            data: (weather) {
-              if (weather == null) {
-                return const Center(
-                  child: Text(
-                    'No weather data available.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
-              return Column(
-                children: [
-                  CustomAppBar(weather: weather),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Card(
-                              elevation: 0,
-                              child: Column(
-                                children: [
-                                  WeatherDetailsContent(weather: weather),
-                                  WeatherHourlyForecast(
-                                    hourly: weather.forecast.first.hourly,
-                                    localtimeEpoch:
-                                        weather.location.localtimeEpoch,
-                                  ),
-                                ],
+          child: Column(
+            children: [
+              CustomAppBar(weather: weather),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Card(
+                          elevation: 0,
+                          child: Column(
+                            children: [
+                              WeatherDetailsContent(weather: weather),
+                              WeatherHourlyForecast(
+                                hourly: weather.forecast.first.hourly,
+                                localtimeEpoch: weather.location.localtimeEpoch,
+                                timezoneId: weather.location.timezoneId,
                               ),
-                            ),
-                            WeatherForecast(forecast: weather.forecast),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+                        WeatherForecast(forecast: weather.forecast),
+                      ],
                     ),
                   ),
-                ],
-              );
-            },
-            error: (error, _) => Center(
-              child: Text(
-                'Error: $error',
-                style: const TextStyle(color: Colors.white),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

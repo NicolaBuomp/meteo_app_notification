@@ -11,7 +11,7 @@ class ClearDataSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherViewModel = ref.read(weatherViewModelProvider.notifier);
-    final cityInfoViewModel = ref.read(cityInfoViewModelProvider.notifier);
+    final cityInfoViewModel = ref.read(favoriteCityViewModelProvider.notifier);
 
     Future<void> clearData({
       required Future<void> Function() clearFunction,

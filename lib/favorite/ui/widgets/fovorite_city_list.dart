@@ -10,48 +10,63 @@ class FavoriteCityList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cityInfoState = ref.watch(cityInfoViewModelProvider);
+    // Recupera lo stato del provider
+    final cityInfoState = ref.watch(favoriteCityViewModelProvider);
 
-    return cityInfoState.when(
-      data: (cities) {
-        if (cities.isEmpty) {
-          return const Center(
-            child: Text('Nessuna città preferita'),
-          );
-        }
+    if (cityInfoState.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    if (cityInfoState.errorMessage.isNotEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              reverse: true,
-              itemCount: cities.length,
-              itemBuilder: (context, index) {
-                final city = cities[index];
-                return FavoriteCityCard(
-                  city: city,
-                  onTap: () {
-                    final weatherViewModel =
-                        ref.read(weatherViewModelProvider.notifier);
-                    weatherViewModel.loadWeatherByCity(city.name);
-                    context.go('/weather');
-                  },
-                );
+            const Icon(Icons.error, color: Colors.red, size: 24),
+            const SizedBox(height: 8),
+            Text(
+              'Errore: ${cityInfoState.errorMessage}',
+              style: const TextStyle(color: Colors.red, fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Ricarica le città preferite in caso di errore
+                ref.read(favoriteCityViewModelProvider.notifier).loadCityInfo();
               },
+              child: const Text('Riprova'),
             ),
           ],
+        ),
+      );
+    }
+
+    if (cityInfoState.cities.isEmpty) {
+      return const Center(
+        child: Text(
+          'Nessuna città preferita',
+          style: TextStyle(fontSize: 18),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: cityInfoState.cities.length,
+      itemBuilder: (context, index) {
+        final city = cityInfoState.cities[index];
+        return FavoriteCityCard(
+          city: city,
+          onTap: () {
+            final weatherViewModel =
+                ref.read(weatherViewModelProvider.notifier);
+            weatherViewModel.loadWeatherByLocation(
+              city.latitude,
+              city.longitude,
+            );
+            context.go('/weather');
+          },
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Center(
-        child: Text(
-          'Error: $error',
-          style: const TextStyle(color: Colors.red),
-        ),
-      ),
     );
   }
 }

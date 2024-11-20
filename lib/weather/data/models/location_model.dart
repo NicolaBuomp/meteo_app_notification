@@ -6,6 +6,7 @@ class Location {
   final int localtimeEpoch;
   final double latitude;
   final double longitude;
+  final String timezoneId;
 
   Location({
     required this.name,
@@ -15,6 +16,7 @@ class Location {
     required this.localtimeEpoch,
     required this.latitude,
     required this.longitude,
+    required this.timezoneId,
   });
 
   factory Location.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Location {
       localtimeEpoch: json['localtime_epoch'] as int? ?? 0,
       latitude: (json['lat'] as num?)?.toDouble() ?? 0.0,
       longitude: (json['lon'] as num?)?.toDouble() ?? 0.0,
+      timezoneId: json['tz_id'] as String? ?? '',
     );
   }
 
@@ -38,6 +41,7 @@ class Location {
       'localtime_epoch': localtimeEpoch,
       'lat': latitude,
       'lon': longitude,
+      'timezone_id': timezoneId,
     };
   }
 }

@@ -18,8 +18,10 @@ class ToggleCityActions extends StatelessWidget {
     return Row(
       children: [
         ToggleFavoriteButton(
-          city: weather.location.name,
           iconSize: iconSize,
+          cityName: weather.location.name,
+          latitude: weather.location.latitude,
+          longitude: weather.location.longitude,
         ),
         ToggleNotificationButton(
           city: weather.location.name,

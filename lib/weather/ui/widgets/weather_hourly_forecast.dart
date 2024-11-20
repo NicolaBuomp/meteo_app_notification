@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:meteo_app_notification/weather/ui/widgets/weather_icon.dart';
 import '../../data/models/hourly_forecast_model.dart';
 
 class WeatherHourlyForecast extends StatelessWidget {
   final List<HourlyForecast> hourly;
-  final int localtimeEpoch;
+  final int localtimeEpoch; // Orario locale in secondi
+  final String timezoneId; // "Europe/London", "America/Los_Angeles", etc.
 
   const WeatherHourlyForecast({
     super.key,
     required this.hourly,
     required this.localtimeEpoch,
+    required this.timezoneId,
   });
 
   @override
   Widget build(BuildContext context) {
-    final currentTime =
-        DateTime.fromMillisecondsSinceEpoch(localtimeEpoch * 1000);
+    // Ottieni la location dal timezoneId
+    final validTimezoneId = timezoneId.isNotEmpty ? timezoneId : 'UTC';
+    final location = tz.getLocation(validTimezoneId);
+
+    // Calcola l'orario corrente nel fuso orario della location
+    final currentTime = tz.TZDateTime.fromMillisecondsSinceEpoch(
+      location,
+      localtimeEpoch * 1000,
+    );
+
     final filteredHourly = hourly.where((hour) {
-      final hourTime =
-          DateTime.fromMillisecondsSinceEpoch(hour.timeEpoch * 1000);
+      final hourTime = tz.TZDateTime.fromMillisecondsSinceEpoch(
+        location,
+        hour.timeEpoch * 1000,
+      );
       return hourTime.isAfter(currentTime);
     }).toList();
 
@@ -43,7 +56,7 @@ class WeatherHourlyForecast extends StatelessWidget {
               itemCount: filteredHourly.length,
               itemBuilder: (context, index) {
                 final hour = filteredHourly[index];
-                return _buildHourlyTile(hour);
+                return _buildHourlyTile(hour, location);
               },
             ),
           ),
@@ -52,9 +65,13 @@ class WeatherHourlyForecast extends StatelessWidget {
     );
   }
 
-  Widget _buildHourlyTile(HourlyForecast hour) {
-    final time = DateFormat.Hm()
-        .format(DateTime.fromMillisecondsSinceEpoch(hour.timeEpoch * 1000));
+  Widget _buildHourlyTile(HourlyForecast hour, tz.Location location) {
+    final time = DateFormat.Hm().format(
+      tz.TZDateTime.fromMillisecondsSinceEpoch(
+        location,
+        hour.timeEpoch * 1000,
+      ),
+    );
 
     return Card(
       elevation: 0,

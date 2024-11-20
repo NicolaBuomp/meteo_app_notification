@@ -1,24 +1,24 @@
 class FavoriteCityModel {
   final String name;
   bool notificationEnabled;
-  double? latitude;
-  double? longitude;
+  final double latitude;
+  final double longitude;
   String? weatherCondition;
 
   FavoriteCityModel({
     required this.name,
+    required this.latitude,
+    required this.longitude,
     this.notificationEnabled = false,
-    this.latitude,
-    this.longitude,
     this.weatherCondition,
   });
 
   factory FavoriteCityModel.fromJson(Map<String, dynamic> json) {
     return FavoriteCityModel(
       name: json['name'] as String,
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
       notificationEnabled: json['notificationEnabled'] as bool? ?? false,
-      latitude: json['latitude'] as double?,
-      longitude: json['longitude'] as double?,
       weatherCondition: json['weatherCondition'] as String?,
     );
   }
@@ -26,9 +26,9 @@ class FavoriteCityModel {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'notificationEnabled': notificationEnabled,
       'latitude': latitude,
       'longitude': longitude,
+      'notificationEnabled': notificationEnabled,
       'weatherCondition': weatherCondition,
     };
   }

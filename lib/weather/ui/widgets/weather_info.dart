@@ -73,7 +73,7 @@ class WeatherInfo extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       context.push(
-                        '/weatherDetails/${weather.location.latitude}/${weather.location.longitude}',
+                        '/weather/details/${weather.location.latitude}/${weather.location.longitude}',
                       );
                     },
                     child: Row(

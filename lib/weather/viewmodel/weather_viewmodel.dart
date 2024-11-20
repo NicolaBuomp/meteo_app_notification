@@ -1,12 +1,41 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meteo_app_notification/services/notifications/local_notifications_services.dart';
+import 'package:meteo_app_notification/weather/data/models/search_city_model.dart';
+import 'package:meteo_app_notification/weather/data/models/weather_model.dart';
+import 'package:meteo_app_notification/weather/data/repository/weather_repository.dart';
+import 'package:meteo_app_notification/weather/services/weather_service.dart';
 import 'package:meteo_app_notification/weather/services/weather_notification_service.dart';
-import '../data/models/weather_model.dart';
-import '../data/repository/weather_repository.dart';
-import '../services/weather_service.dart';
 
-class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
+class WeatherState {
+  final bool isLoading;
+  final List<SearchCityModel> searchResults;
+  final WeatherModel? weather;
+  final String? error;
+
+  WeatherState({
+    this.isLoading = false,
+    this.searchResults = const [],
+    this.weather,
+    this.error,
+  });
+
+  WeatherState copyWith({
+    bool? isLoading,
+    List<SearchCityModel>? searchResults,
+    WeatherModel? weather,
+    String? error,
+  }) {
+    return WeatherState(
+      isLoading: isLoading ?? this.isLoading,
+      searchResults: searchResults ?? this.searchResults,
+      weather: weather ?? this.weather,
+      error: error ?? this.error,
+    );
+  }
+}
+
+class WeatherViewModel extends StateNotifier<WeatherState> {
   final WeatherRepository _repository;
   final WeatherService _weatherService;
   final WeatherNotificationService _notificationService;
@@ -15,65 +44,69 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     this._repository,
     this._weatherService,
     this._notificationService,
-  ) : super(const AsyncValue.loading()) {
+  ) : super(WeatherState(isLoading: true)) {
     _initializeWeatherData();
   }
 
+  /// Inizializza i dati meteo caricando quelli in cache e aggiornandoli con la posizione corrente.
   Future<void> _initializeWeatherData() async {
     try {
-      // Step 1: Carica i dati dalla cache
       final cachedWeather = await _weatherService.getWeatherData();
       if (cachedWeather != null) {
-        state = AsyncValue.data(cachedWeather);
+        state = state.copyWith(weather: cachedWeather, isLoading: false);
       }
-
-      // Step 2: Aggiorna i dati con la posizione attuale
       await loadWeatherWithPermission();
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
-  Future<void> loadWeatherByCity(String city, {int days = 3}) async {
+  /// Carica i dati meteo per una città specifica.
+  Future<void> loadWeatherByCity(String cityName, {int days = 3}) async {
     try {
-      state = const AsyncValue.loading();
-      final weather = await _repository.getWeatherByCity(city, days);
-      await _weatherService.saveWeatherData(weather); // Salva nella cache
-      state = AsyncValue.data(weather);
+      state = state.copyWith(isLoading: true);
+      final weather = await _repository.getWeatherByCity(cityName, days);
+      await _weatherService.saveWeatherData(weather);
+      state = state.copyWith(weather: weather, isLoading: false);
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
+  /// Carica i dati meteo in base alla posizione geografica.
   Future<void> loadWeatherByLocation(double latitude, double longitude,
       {int days = 3}) async {
     try {
+      state = state.copyWith(isLoading: true);
       final weather =
           await _repository.getWeatherByCoordinates(latitude, longitude, days);
       await _weatherService.saveWeatherData(weather);
-      state = AsyncValue.data(weather);
+      state = state.copyWith(weather: weather, isLoading: false);
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
+  /// Carica i dati meteo con il permesso della posizione.
   Future<void> loadWeatherWithPermission() async {
     try {
       final position = await _determinePosition();
       await loadWeatherByLocation(position.latitude, position.longitude);
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
+  /// Aggiorna i dati meteo per la posizione corrente.
   Future<void> refreshWeather({int days = 3}) async {
-    if (state.value != null) {
-      final lat = state.value!.location.latitude;
-      final long = state.value!.location.longitude;
+    if (state.weather != null) {
+      final lat = state.weather!.location.latitude;
+      final long = state.weather!.location.longitude;
       await loadWeatherByLocation(lat, long, days: days);
     }
   }
 
+  /// Determina la posizione corrente dell'utente.
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -100,24 +133,47 @@ class WeatherViewModel extends StateNotifier<AsyncValue<WeatherModel?>> {
     return await Geolocator.getCurrentPosition();
   }
 
+  /// Cancella i dati meteo attualmente caricati.
   Future<void> clearWeatherData() async {
-    state = const AsyncValue.data(null);
+    state = WeatherState();
     await _weatherService.clearWeatherCache();
   }
 
+  /// Controlla se è prevista pioggia oggi e invia una notifica.
   Future<void> dailyRainCheck() async {
     try {
-      if (state.value != null) {
-        await _notificationService.checkDailyRain(state.value!);
+      if (state.weather != null) {
+        await _notificationService.checkDailyRain(state.weather!);
       }
     } catch (e) {
       print('Errore durante il controllo della pioggia: $e');
     }
   }
+
+  /// Effettua una ricerca per città in base alla query fornita.
+  Future<List<SearchCityModel>> searchCities(String query) async {
+    if (query.isEmpty) {
+      state = state.copyWith(searchResults: []);
+      return [];
+    }
+    try {
+      final results = await _repository.searchCities(query);
+      state = state.copyWith(searchResults: results);
+      return results;
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+      return [];
+    }
+  }
+
+  /// Cancella i risultati della ricerca.
+  void clearSearchResults() {
+    state = state.copyWith(searchResults: []);
+  }
 }
 
 final weatherViewModelProvider =
-    StateNotifierProvider<WeatherViewModel, AsyncValue<WeatherModel?>>((ref) {
+    StateNotifierProvider<WeatherViewModel, WeatherState>((ref) {
   final repository = WeatherRepository();
   final weatherService = WeatherService();
   final localNotificationsService = LocalNotificationsService();

@@ -2,86 +2,112 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meteo_app_notification/favorite/data/models/favorite_city_model.dart';
 import 'package:meteo_app_notification/favorite/services/favority_city_service.dart';
 
-class FavoriteCityViewModel
-    extends StateNotifier<AsyncValue<List<FavoriteCityModel>>> {
+class FavoriteCityState {
+  final List<FavoriteCityModel> cities;
+  final bool isLoading;
+  final String errorMessage;
+
+  FavoriteCityState({
+    this.cities = const [],
+    this.isLoading = false,
+    this.errorMessage = '',
+  });
+
+  FavoriteCityState copyWith({
+    List<FavoriteCityModel>? cities,
+    bool? isLoading,
+    String? errorMessage,
+  }) {
+    return FavoriteCityState(
+      cities: cities ?? this.cities,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+}
+
+class FavoriteCityViewModel extends StateNotifier<FavoriteCityState> {
   final FavoriteCityService _cityInfoService;
 
-  FavoriteCityViewModel(this._cityInfoService)
-      : super(const AsyncValue.loading()) {
-    _loadCityInfo();
+  FavoriteCityViewModel(this._cityInfoService) : super(FavoriteCityState()) {
+    loadCityInfo();
   }
 
-  Future<void> _loadCityInfo() async {
+  Future<void> loadCityInfo() async {
+    state = state.copyWith(isLoading: true, errorMessage: '');
     try {
       final cities = await _cityInfoService.loadCityInfo();
-      state = AsyncValue.data(cities);
+      state = state.copyWith(cities: cities, isLoading: false);
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.toString(),
+      );
     }
   }
 
-  /// Aggiunge una nuova città e salva.
-  Future<void> addCity(String cityName) async {
-    final currentState = state.value ?? [];
-    if (!currentState.any((c) => c.name == cityName)) {
-      final updatedList = [...currentState, FavoriteCityModel(name: cityName)];
-      state = AsyncValue.data(updatedList);
-      await _cityInfoService.saveCityInfo(updatedList);
+  Future<void> addCity(
+      String cityName, double latitude, double longitude) async {
+    try {
+      final currentState = state.cities;
+      if (!currentState.any((c) => c.name == cityName)) {
+        final updatedList = [
+          ...currentState,
+          FavoriteCityModel(
+            name: cityName,
+            latitude: latitude,
+            longitude: longitude,
+          ),
+        ];
+        state = state.copyWith(cities: updatedList);
+        await _cityInfoService.saveCityInfo(updatedList);
+      }
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
     }
   }
 
-  /// Rimuove una città e salva.
   Future<void> removeCity(String cityName) async {
-    final currentState = state.value ?? [];
-    final updatedList = currentState.where((c) => c.name != cityName).toList();
-    state = AsyncValue.data(updatedList);
-    await _cityInfoService.saveCityInfo(updatedList);
+    try {
+      final currentState = state.cities;
+      final updatedList =
+          currentState.where((c) => c.name != cityName).toList();
+      state = state.copyWith(cities: updatedList);
+      await _cityInfoService.saveCityInfo(updatedList);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
-  /// Attiva/disattiva le notifiche per una città e salva.
   Future<void> toggleNotification(String cityName) async {
-    final currentState = state.value ?? [];
-    final updatedList = currentState.map((city) {
-      if (city.name == cityName) {
-        return FavoriteCityModel(
-          name: city.name,
-          notificationEnabled: !city.notificationEnabled,
-          latitude: city.latitude,
-          longitude: city.longitude,
-          weatherCondition: city.weatherCondition,
-        );
-      }
-      return city;
-    }).toList();
+    try {
+      final currentState = state.cities;
+      final updatedList = currentState.map((city) {
+        if (city.name == cityName) {
+          return FavoriteCityModel(
+            name: city.name,
+            latitude: city.latitude,
+            longitude: city.longitude,
+            notificationEnabled: !city.notificationEnabled,
+            weatherCondition: city.weatherCondition,
+          );
+        }
+        return city;
+      }).toList();
 
-    state = AsyncValue.data(updatedList);
-    await _cityInfoService.saveCityInfo(updatedList);
+      state = state.copyWith(cities: updatedList);
+      await _cityInfoService.saveCityInfo(updatedList);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
-  /// Aggiorna le informazioni meteo per una città.
-  Future<void> updateWeatherInfo(
-      String cityName, String weatherCondition) async {
-    final currentState = state.value ?? [];
-    final updatedList = currentState.map((city) {
-      if (city.name == cityName) {
-        return FavoriteCityModel(
-          name: city.name,
-          notificationEnabled: city.notificationEnabled,
-          latitude: city.latitude,
-          longitude: city.longitude,
-          weatherCondition: weatherCondition,
-        );
-      }
-      return city;
-    }).toList();
-
-    state = AsyncValue.data(updatedList);
-    await _cityInfoService.saveCityInfo(updatedList);
-  }
-
-  /// Rimuove tutte le città.
   Future<void> removeAll() async {
-    state = const AsyncValue.data([]);
-    await _cityInfoService.clearCityInfoCache();
+    try {
+      state = state.copyWith(cities: []);
+      await _cityInfoService.clearCityInfoCache();
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 }
