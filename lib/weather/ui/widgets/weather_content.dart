@@ -38,24 +38,20 @@ class _WeatherContentState extends ConsumerState<WeatherContent> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: CustomSearchInput(
-              controller: searchController,
-              hintText: getCityNameText(weatherState.weather),
-              maxResults: 3,
-              onLeadingIconTap: () async {
-                await ref
-                    .read(weatherViewModelProvider.notifier)
-                    .loadWeatherWithPermission();
-              },
-              onCitySelected: (city) {
-                ref
-                    .read(weatherViewModelProvider.notifier)
-                    .loadWeatherByLocation(city.lat, city.lon);
-              },
-            ),
+          CustomSearchInput(
+            controller: searchController,
+            hintText: getCityNameText(weatherState.weather),
+            maxResults: 3,
+            onLeadingIconTap: () async {
+              await ref
+                  .read(weatherViewModelProvider.notifier)
+                  .loadWeatherWithPermission();
+            },
+            onCitySelected: (city) {
+              ref
+                  .read(weatherViewModelProvider.notifier)
+                  .loadWeatherByLocation(city.lat, city.lon);
+            },
           ),
           Column(
             children: [

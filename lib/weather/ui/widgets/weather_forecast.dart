@@ -10,35 +10,30 @@ class WeatherForecast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ottieni la data attuale senza il timestamp dell'ora.
     final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-    // Filtra la forecast per rimuovere il giorno corrente.
     final filteredForecast = forecast.where((day) {
       return day.date != today;
     }).toList();
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Nei prossimi giorni',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: filteredForecast.length,
-            itemBuilder: (context, index) {
-              final day = filteredForecast[index];
-              return _buildForecastTile(day);
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Nei prossimi giorni',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: filteredForecast.length,
+          itemBuilder: (context, index) {
+            final day = filteredForecast[index];
+            return _buildForecastTile(day);
+          },
+        ),
+      ],
     );
   }
 
