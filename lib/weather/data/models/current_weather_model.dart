@@ -8,6 +8,7 @@ class CurrentWeather {
   final double feelsLike;
   final double uvIndex;
   final bool isDayTime;
+  final int lastUpdated;
 
   CurrentWeather({
     required this.temperature,
@@ -17,11 +18,13 @@ class CurrentWeather {
     required this.feelsLike,
     required this.uvIndex,
     required this.isDayTime,
+    required this.lastUpdated,
   });
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
     return CurrentWeather(
       temperature: (json['temp_c'] as num?)?.toDouble() ?? 0.0,
+      lastUpdated: (json['last_updated_epoch'] as num?)?.toInt() ?? 0,
       condition: WeatherCondition.fromJson(json['condition'] ?? {}),
       humidity: json['humidity'] as int? ?? 0,
       windSpeed: (json['wind_kph'] as num?)?.toDouble() ?? 0.0,
@@ -34,6 +37,7 @@ class CurrentWeather {
   Map<String, dynamic> toJson() {
     return {
       'temp_c': temperature,
+      'last_updated_epoch': lastUpdated,
       'condition': condition.toJson(),
       'humidity': humidity,
       'wind_kph': windSpeed,

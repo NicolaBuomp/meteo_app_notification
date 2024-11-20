@@ -21,15 +21,16 @@ class WeatherDetailsPage extends ConsumerWidget {
     final weatherState = ref.watch(weatherViewModelProvider);
     final weatherViewModel = ref.read(weatherViewModelProvider.notifier);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (latitude != null && longitude != null) {
+    // Esegui il caricamento solo se non ci sono dati
+    if (latitude != null && longitude != null && weatherState.weather == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         weatherViewModel.loadWeatherByLocation(
           double.parse(latitude!),
           double.parse(longitude!),
           days: 3,
         );
-      }
-    });
+      });
+    }
 
     if (weatherState.isLoading) {
       return const Scaffold(
@@ -67,21 +68,14 @@ class WeatherDetailsPage extends ConsumerWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Card(
-                          elevation: 0,
-                          child: Column(
-                            children: [
-                              WeatherDetailsContent(weather: weather),
-                              WeatherHourlyForecast(
-                                hourly: weather.forecast.first.hourly,
-                                localtimeEpoch: weather.location.localtimeEpoch,
-                                timezoneId: weather.location.timezoneId,
-                              ),
-                            ],
-                          ),
+                        WeatherDetailsContent(weather: weather),
+                        WeatherHourlyForecast(
+                          hourly: weather.forecast.first.hourly,
+                          localtimeEpoch: weather.location.localtimeEpoch,
+                          timezoneId: weather.location.timezoneId,
                         ),
                         WeatherForecast(forecast: weather.forecast),
                       ],

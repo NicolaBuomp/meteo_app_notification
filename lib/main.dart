@@ -30,7 +30,9 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeViewModelProvider);
 
     // Aggiorna dinamicamente lo stile della status bar quando il tema cambia
-    _updateStatusBarStyle(themeMode);
+    ref.listen<ThemeMode>(themeViewModelProvider, (previous, next) {
+      _updateStatusBarStyle(next);
+    });
 
     return TranslationProvider(
       child: Builder(
@@ -53,10 +55,14 @@ class MyApp extends ConsumerWidget {
         ? SystemUiOverlayStyle.light.copyWith(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.black,
+            systemNavigationBarIconBrightness: Brightness.light,
           )
         : SystemUiOverlayStyle.dark.copyWith(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarColor: Colors.white,
+            systemNavigationBarIconBrightness: Brightness.dark,
           );
 
     SystemChrome.setSystemUIOverlayStyle(overlayStyle);

@@ -8,12 +8,16 @@ class WeatherHourlyForecast extends StatelessWidget {
   final List<HourlyForecast> hourly;
   final int localtimeEpoch; // Orario locale in secondi
   final String timezoneId; // "Europe/London", "America/Los_Angeles", etc.
+  final double hPadding;
+  final double vPadding;
 
   const WeatherHourlyForecast({
     super.key,
     required this.hourly,
     required this.localtimeEpoch,
     required this.timezoneId,
+    this.hPadding = 0.0,
+    this.vPadding = 16.0,
   });
 
   @override
@@ -37,7 +41,7 @@ class WeatherHourlyForecast extends StatelessWidget {
     }).toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: vPadding, horizontal: hPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
