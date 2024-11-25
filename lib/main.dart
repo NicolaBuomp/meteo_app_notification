@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meteo_app_notification/auth/di/auth_provider.dart';
 import 'package:meteo_app_notification/base/router/router.dart';
 import 'package:meteo_app_notification/base/theme/app_theme.dart';
 import 'package:meteo_app_notification/base/viewmodel/theme_viewmodel.dart';
@@ -28,16 +28,12 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeViewModelProvider);
-
-    // Aggiorna dinamicamente lo stile della status bar quando il tema cambia
-    ref.listen<ThemeMode>(themeViewModelProvider, (previous, next) {
-      _updateStatusBarStyle(next);
-    });
+    final authState = ref.watch(authViewModelProvider);
 
     return TranslationProvider(
       child: Builder(
         builder: (context) => MaterialApp.router(
-          routerConfig: router,
+          routerConfig: router(authState.isAuthenticated),
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
@@ -48,23 +44,5 @@ class MyApp extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  void _updateStatusBarStyle(ThemeMode themeMode) {
-    final SystemUiOverlayStyle overlayStyle = themeMode == ThemeMode.dark
-        ? SystemUiOverlayStyle.light.copyWith(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: Colors.black,
-            systemNavigationBarIconBrightness: Brightness.light,
-          )
-        : SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: Colors.white,
-            systemNavigationBarIconBrightness: Brightness.dark,
-          );
-
-    SystemChrome.setSystemUIOverlayStyle(overlayStyle);
   }
 }
